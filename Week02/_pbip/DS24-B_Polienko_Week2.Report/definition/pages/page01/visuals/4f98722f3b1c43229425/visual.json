@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "4f98722f3b1c43229425",
+  "position": {
+    "x": 660,
+    "y": 290,
+    "z": 6000,
+    "height": 360,
+    "width": 1240,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales_City_Payment"
+                    }
+                  },
+                  "Property": "City"
+                }
+              },
+              "queryRef": "Sales_City_Payment.City",
+              "nativeQueryRef": "City"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales_City_Payment"
+                    }
+                  },
+                  "Property": "Card"
+                }
+              },
+              "queryRef": "Sales_City_Payment.Card",
+              "nativeQueryRef": "Card"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales_City_Payment"
+                    }
+                  },
+                  "Property": "Cash"
+                }
+              },
+              "queryRef": "Sales_City_Payment.Cash",
+              "nativeQueryRef": "Cash"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales_City_Payment"
+                    }
+                  },
+                  "Property": "Kaspi QR"
+                }
+              },
+              "queryRef": "Sales_City_Payment.Kaspi QR",
+              "nativeQueryRef": "Kaspi QR"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sales_City_Payment"
+                    }
+                  },
+                  "Property": "QR"
+                }
+              },
+              "queryRef": "Sales_City_Payment.QR",
+              "nativeQueryRef": "QR"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pivot: City × PaymentMethod (Sum SalesAmount)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

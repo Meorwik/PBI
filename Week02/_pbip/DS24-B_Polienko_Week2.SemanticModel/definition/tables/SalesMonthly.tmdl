@@ -1,0 +1,52 @@
+table SalesMonthly
+	lineageTag: f59ed740-d0f3-4b57-b223-14479d79f7f4
+
+	column Product
+		dataType: string
+		lineageTag: be5b7e00-e538-4413-bd00-00266800b10d
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		lineageTag: c7b7972f-a4e3-4aad-bb5e-9ffdd5d0fcaa
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: int64
+		formatString: 0
+		lineageTag: f61ea29f-9afd-4f94-b36b-9a4ef1232f6a
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 5aa6c659-193f-4de1-b0e4-4120af2a01c1
+		summarizeBy: none
+		sourceColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SalesMonthly = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_MonthlySales,
+				    #"Отмененное свертывание других столбцов" = Table.UnpivotOtherColumns(Источник, {"Product"}, "Attribute", "Value"),
+				    #"Переименованные столбцы" = Table.RenameColumns(#"Отмененное свертывание других столбцов",{{"Attribute", "Month"}, {"Value", "Sales"}}),
+				    #"Добавлен MonthNumber" = Table.AddColumn(#"Переименованные столбцы", "MonthNumber", each List.PositionOf({"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}, [Month]) + 1, Int64.Type),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Добавлен MonthNumber",{{"Sales", Int64.Type}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Week01_Polienko_Ilya"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b644e4b3-5036-4b22-b5e1-442a682a3b35"
+  }
+}

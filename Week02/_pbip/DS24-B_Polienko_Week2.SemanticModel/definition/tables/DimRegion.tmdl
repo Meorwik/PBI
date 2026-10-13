@@ -1,0 +1,37 @@
+table DimRegion
+	lineageTag: 7407e922-4c63-44de-90c2-548492861701
+
+	column Region
+		dataType: string
+		lineageTag: a4e50303-e2be-4972-b4bb-093925dd540f
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 03193240-e991-4f0f-b200-b54c7afe582e
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionalManager
+		dataType: string
+		lineageTag: 3a851582-4ca8-4116-9333-fd4284e61026
+		summarizeBy: none
+		sourceColumn: RegionalManager
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimRegion = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Regions
+				in
+				    Источник
+
+	annotation PBI_ResultType = Table

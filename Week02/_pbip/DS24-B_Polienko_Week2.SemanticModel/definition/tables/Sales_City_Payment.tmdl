@@ -1,0 +1,55 @@
+table Sales_City_Payment
+	lineageTag: 359e723c-5385-4780-917e-69e9b7cd22cd
+
+	column City
+		dataType: string
+		lineageTag: 1ef49922-7221-4d09-9be5-08712f4036c2
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Card
+		dataType: double
+		lineageTag: 904d795a-81e5-4df7-8949-2ff18e5c1750
+		summarizeBy: sum
+		sourceColumn: Card
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cash
+		dataType: double
+		lineageTag: 1c7b1943-60e3-4d34-ae33-d77ec66eabfa
+		summarizeBy: sum
+		sourceColumn: Cash
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Kaspi QR'
+		dataType: double
+		lineageTag: 06f147f8-3de5-4278-9f25-1e98a4456a02
+		summarizeBy: sum
+		sourceColumn: Kaspi QR
+
+		annotation SummarizationSetBy = Automatic
+
+	column QR
+		dataType: double
+		lineageTag: abefd25f-f9fd-4c99-abca-ff4207dbfcc2
+		summarizeBy: sum
+		sourceColumn: QR
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales_City_Payment = m
+		mode: import
+		queryGroup: '20_ANALYSIS'
+		source =
+				let
+				    Источник = FactSales,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"City", "PaymentMethod", "SalesAmount"}),
+				    #"Сводный столбец" = Table.Pivot(#"Другие удаленные столбцы", List.Distinct(#"Другие удаленные столбцы"[PaymentMethod]), "PaymentMethod", "SalesAmount", List.Sum)
+				in
+				    #"Сводный столбец"
+
+	annotation PBI_ResultType = Table

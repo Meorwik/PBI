@@ -1,0 +1,7 @@
+relationship e414c39a-cd14-47eb-9921-29ba44d014d8
+	fromColumn: FactSales.ProductCode
+	toColumn: DimProduct.ProductCode
+
+relationship 8b682674-90b7-404a-b7c8-99e889e78be2
+	fromColumn: FactSales.City
+	toColumn: DimRegion.City

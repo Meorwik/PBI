@@ -1,0 +1,194 @@
+table FactSales
+	lineageTag: 9709de34-ff5c-49cf-8b9f-afba552e89e4
+
+	measure 'Total Sales' = SUM(FactSales[SalesAmount])
+		formatString: #,0
+		lineageTag: 40372cd5-20c0-4200-b5e7-8d95093d14ca
+
+	measure Rows = COUNTROWS(FactSales)
+		lineageTag: 92d02a7f-9be3-4aac-a3d8-405a06e41159
+
+	measure 'Check Rows' = CALCULATE(COUNTROWS(FactSales), FactSales[OrderQuality] = "Check")
+		lineageTag: c9b3b0f2-3124-4166-bc0a-035d3fd9bc47
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 818cff61-bc1a-4c5c-9853-f94214ae0185
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 15430bf3-24b2-42ab-8409-a111ab2e27f5
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		lineageTag: fe8211bf-24a9-4f46-874f-2b99bb724f62
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: 0cb7d91c-fb71-4b0d-99be-a78fc16c9231
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: c2eb1300-6da3-4101-8227-c20a9b7af7f2
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: d0343b6b-a52a-4844-9f13-3fdad7f8786c
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCode
+		dataType: string
+		lineageTag: a141ba91-7662-46da-a652-f8411ace112a
+		summarizeBy: none
+		sourceColumn: ProductCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: f1c3cecd-9aaa-4baf-8b3c-35d5cb3a1724
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 5e04ebe6-1020-4c18-9cd1-f6440c2a1633
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 81dc389e-2bb1-4d24-bf96-a97ab4c8905b
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: e246e9da-10c1-46c9-b312-b8eedecbe036
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 895b2acc-7ba7-4464-bb83-0db2a4efd0cf
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		lineageTag: 8f3a0468-d0ad-44cd-8c47-0c6a5c43d121
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentMethod
+		dataType: string
+		lineageTag: 91071c63-2249-4fa6-941b-862ecdd3f95c
+		summarizeBy: none
+		sourceColumn: PaymentMethod
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manager
+		dataType: string
+		lineageTag: 02cfd139-587a-487d-abfc-f7895c511be4
+		summarizeBy: none
+		sourceColumn: Manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 045e00c1-8119-4761-b0ce-6fca94209b66
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesLevel
+		dataType: string
+		lineageTag: bdf7869f-09e7-4095-a8ab-421abe9ab5c9
+		summarizeBy: none
+		sourceColumn: SalesLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderQuality
+		dataType: string
+		lineageTag: 629e1232-031d-4bee-b619-5ed3145cb74b
+		summarizeBy: none
+		sourceColumn: OrderQuality
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerLastName
+		dataType: string
+		lineageTag: 397d9994-583d-48fe-a210-c5b19902b1a0
+		summarizeBy: none
+		sourceColumn: CustomerLastName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales,
+				    #"Объединенные запросы" = Table.NestedJoin(Источник, {"ProductCode"}, stg_Products, {"ProductCode"}, "stg_Products", JoinKind.LeftOuter),
+				    #"Развернутый элемент stg_Products" = Table.ExpandTableColumn(#"Объединенные запросы", "stg_Products", {"StandardPrice"}, {"StandardPrice"}),
+				    #"UnitPrice из прайса" = Table.ReplaceValue(#"Развернутый элемент stg_Products", each [UnitPrice], each if [UnitPrice] = null then [StandardPrice] else [UnitPrice], Replacer.ReplaceValue, {"UnitPrice"}),
+				    #"Восстановлен Discount" = Table.ReplaceValue(#"UnitPrice из прайса", each [Discount], each if [Discount] = null and [Quantity] <> null and [Quantity] > 0 and [SalesAmount] <> null then Number.Round(1 - [SalesAmount] / ([Quantity] * [UnitPrice]), 2) else [Discount], Replacer.ReplaceValue, {"Discount"}),
+				    #"Восстановлено Quantity" = Table.ReplaceValue(#"Восстановлен Discount", each [Quantity], each if [Quantity] = null and [SalesAmount] <> null and [Discount] <> null then Number.Round([SalesAmount] / ([UnitPrice] * (1 - [Discount]))) else [Quantity], Replacer.ReplaceValue, {"Quantity"}),
+				    #"Восстановлена SalesAmount" = Table.ReplaceValue(#"Восстановлено Quantity", each [SalesAmount], each if [SalesAmount] = null and [Quantity] <> null and [Discount] <> null then [Quantity] * [UnitPrice] * (1 - [Discount]) else [SalesAmount], Replacer.ReplaceValue, {"SalesAmount"}),
+				    #"Объединенные запросы1" = Table.NestedJoin(#"Восстановлена SalesAmount", {"City"}, stg_Regions, {"City"}, "stg_Regions", JoinKind.LeftOuter),
+				    #"Развернутый элемент stg_Regions" = Table.ExpandTableColumn(#"Объединенные запросы1", "stg_Regions", {"Region"}, {"RegionFromDirectory"}),
+				    #"Region из справочника" = Table.ReplaceValue(#"Развернутый элемент stg_Regions", each [Region], each if [Region] = null then [RegionFromDirectory] else [Region], Replacer.ReplaceValue, {"Region"}),
+				    #"Замененное значение null в Manager" = Table.ReplaceValue(#"Region из справочника", null, "Не указан", Replacer.ReplaceValue, {"Manager"}),
+				    #"Замененное значение null в Status" = Table.ReplaceValue(#"Замененное значение null в Manager", null, "Unknown", Replacer.ReplaceValue, {"Status"}),
+				    #"Добавлен SalesLevel" = Table.AddColumn(#"Замененное значение null в Status", "SalesLevel", each if [SalesAmount] = null then null else if [SalesAmount] >= 500000 then "High" else if [SalesAmount] >= 100000 then "Medium" else "Low", type text),
+				    #"Добавлен OrderQuality" = Table.AddColumn(#"Добавлен SalesLevel", "OrderQuality", each if [Quantity] = null or [SalesAmount] = null then "Check" else if [Quantity] <= 0 then "Check" else if [SalesAmount] <= 0 then "Check" else "OK", type text),
+				    #"Фамилия клиента (столбец из примеров)" = Table.AddColumn(#"Добавлен OrderQuality", "CustomerLastName", each Text.AfterDelimiter([CustomerName], " "), type text),
+				    #"Удаленные столбцы" = Table.RemoveColumns(#"Фамилия клиента (столбец из примеров)",{"StandardPrice", "RegionFromDirectory"}),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Удаленные столбцы",{{"Quantity", Int64.Type}, {"UnitPrice", type number}, {"Discount", type number}, {"SalesAmount", type number}, {"Region", type text}, {"Manager", type text}, {"Status", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

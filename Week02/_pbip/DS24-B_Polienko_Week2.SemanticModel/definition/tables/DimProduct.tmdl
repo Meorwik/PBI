@@ -1,0 +1,78 @@
+table DimProduct
+	lineageTag: c94a786a-90de-4cba-949e-1aab896d52ba
+
+	column ProductCode
+		dataType: string
+		lineageTag: ff502688-f9e5-4db6-b1f4-a1bad5a9f2d9
+		summarizeBy: none
+		sourceColumn: ProductCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 58f65335-cece-4657-8338-a093bb53c7ba
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 60f9d7a4-26d2-4d55-a9e1-53ea5287ec6b
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column StandardPrice
+		dataType: int64
+		formatString: 0
+		lineageTag: b5d8913b-a2ff-4d3f-87f3-de67584db53e
+		summarizeBy: sum
+		sourceColumn: StandardPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierCode
+		dataType: string
+		lineageTag: 9f3f263b-92d5-4d03-96a3-29ed46d6f31f
+		summarizeBy: none
+		sourceColumn: SupplierCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductGroupCode
+		dataType: string
+		lineageTag: d8c5129a-31fc-4a70-b2a8-5474a325435a
+		summarizeBy: none
+		sourceColumn: ProductGroupCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductNumber
+		dataType: string
+		lineageTag: 3b97a677-fbf0-4284-b535-09415602de7a
+		summarizeBy: none
+		sourceColumn: ProductNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductTypeFromExample
+		dataType: string
+		lineageTag: 114b9a54-3b21-46db-bd83-bd4a70d188dc
+		summarizeBy: none
+		sourceColumn: ProductTypeFromExample
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Products
+				in
+				    Источник
+
+	annotation PBI_ResultType = Table

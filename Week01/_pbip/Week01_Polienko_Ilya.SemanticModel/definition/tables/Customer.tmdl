@@ -1,0 +1,72 @@
+table Customer
+	lineageTag: 52709f78-8ce2-4cf7-ae9b-5cd9cbdf6846
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 97f8d88a-9e1c-4f26-b4ca-f509e49b3776
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 24305728-bcea-4d7f-a0ea-f7d15fbf7737
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer
+		dataType: string
+		lineageTag: 59f994fc-f0de-4372-b676-6eec82c2e955
+		summarizeBy: none
+		sourceColumn: Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 1607e806-3400-4c6e-810c-aa81b06bd382
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State-Province
+		dataType: string
+		lineageTag: 92ff2ef0-a94f-45e3-928b-8f0d6edf61b9
+		summarizeBy: none
+		sourceColumn: State-Province
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country-Region
+		dataType: string
+		lineageTag: a52f2b41-fadf-4d7c-8fb5-3437542b88e0
+		summarizeBy: none
+		sourceColumn: Country-Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: 3da08bb9-4f94-4be2-9ec9-dee909fc6022
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents("Z:\Week01\AdventureWorks Sales.xlsx"), null, true),
+				    Customer_Table = Источник{[Item="Customer",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(Customer_Table,{{"CustomerKey", Int64.Type}, {"Customer ID", type text}, {"Customer", type text}, {"City", type text}, {"State-Province", type text}, {"Country-Region", type text}, {"Postal Code", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table
+

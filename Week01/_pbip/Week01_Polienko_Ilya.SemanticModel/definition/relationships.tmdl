@@ -1,0 +1,31 @@
+relationship 3203ff8b-3a6b-4361-9380-ca8612a1b369
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Date
+	toColumn: LocalDateTable_f5edeb46-2437-4636-af9d-c40010717265.Date
+
+relationship 6158ae7a-f449-439b-b09c-5407ccb921e7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Month
+	toColumn: LocalDateTable_e0c1b706-e7a6-4214-8213-c1770c1a3cfb.Date
+
+relationship eac7f362-56f9-424d-bc5e-37149488ce40
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.'Full Date'
+	toColumn: LocalDateTable_3abc42c6-322e-4d36-baa0-5cfcce777016.Date
+
+relationship AutoDetected_2151c5cd-9b00-4211-8876-1a14ef97450b
+	fromColumn: Sales.CustomerKey
+	toColumn: Customer.CustomerKey
+
+relationship AutoDetected_69731a9d-dbec-4819-9260-5c19e9ff19f6
+	fromColumn: Sales.ProductKey
+	toColumn: Product.ProductKey
+
+relationship AutoDetected_b48696f9-68ef-4493-bfa8-236a8f6094a8
+	fromColumn: Sales.SalesTerritoryKey
+	toColumn: SalesTerritory.SalesTerritoryKey
+
+relationship Sales_OrderDate
+	fromColumn: Sales.OrderDateKey
+	toColumn: Date.DateKey
+

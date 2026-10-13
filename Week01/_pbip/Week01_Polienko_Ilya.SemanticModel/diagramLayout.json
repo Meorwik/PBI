@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 120,
+            "y": 380
+          },
+          "nodeIndex": "Customer",
+          "nodeLineageTag": "52709f78-8ce2-4cf7-ae9b-5cd9cbdf6846",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 840,
+            "y": 0
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "15ab333e-7aaa-4bfc-a3a3-eaa2f03d27bd",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 120,
+            "y": 0
+          },
+          "nodeIndex": "Product",
+          "nodeLineageTag": "e920b1a9-08b0-4925-9c0c-092ca53d1ea7",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 480,
+            "y": 200
+          },
+          "nodeIndex": "Sales",
+          "nodeLineageTag": "bc44b7b6-3b9c-41d1-8c96-ecd7eba4444a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 840,
+            "y": 380
+          },
+          "nodeIndex": "SalesTerritory",
+          "nodeLineageTag": "373777c6-2b20-4dbf-9b1e-b686507c3220",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Все таблицы",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Все таблицы",
+  "defaultDiagram": "Все таблицы"
+}

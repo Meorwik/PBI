@@ -1,0 +1,27 @@
+model Model
+	culture: ru-RU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ru-RU
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Customer","Date","Product","Sales","SalesTerritory"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Customer
+ref table Date
+ref table DateTableTemplate_1771a5ff-1738-4e50-8920-37949a300b6a
+ref table LocalDateTable_f5edeb46-2437-4636-af9d-c40010717265
+ref table LocalDateTable_e0c1b706-e7a6-4214-8213-c1770c1a3cfb
+ref table LocalDateTable_3abc42c6-322e-4d36-baa0-5cfcce777016
+ref table Product
+ref table Sales
+ref table SalesTerritory
+
+ref cultureInfo ru-RU
+

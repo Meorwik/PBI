@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "DS24-B_Polienko_Week2"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "14e49c6f-5c76-4d2d-af3b-b68cad4ac32b"
+  }
+}

@@ -1,0 +1,36 @@
+model Model
+	culture: ru-RU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ru-RU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup '00_STAGING'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup '10_MODEL'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup '20_ANALYSIS'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Параметры
+
+	annotation PBI_QueryGroupOrder = 3
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["pSourceFile", "src_Excel", "stg_Sales", "stg_Products", "stg_Regions", "stg_MonthlySales", "FactSales", "DimProduct", "DimRegion", "SalesMonthly", "Sales_By_City", "Sales_City_Payment"]
+
+ref table FactSales
+ref table DimProduct
+ref table DimRegion
+ref table SalesMonthly
+ref table Sales_By_City
+ref table Sales_City_Payment
+
+ref cultureInfo ru-RU

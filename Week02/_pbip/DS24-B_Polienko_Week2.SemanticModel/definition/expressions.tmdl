@@ -1,0 +1,92 @@
+expression pSourceFile = "Z:\Week02\Week2_Dirty_Sales_Student.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: f66c90a3-6e7b-4a74-a305-25dd0e580b21
+	queryGroup: Параметры
+
+	annotation PBI_ResultType = Text
+
+expression src_Excel =
+		let
+		    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true)
+		in
+		    Источник
+	lineageTag: 30e31cdd-270f-496b-970d-1248e393a955
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table
+
+expression stg_Sales =
+		let
+		    Источник = src_Excel,
+		    Sales_Raw_Sheet = Источник{[Item="Sales_Raw",Kind="Sheet"]}[Data],
+		    #"Повышенные заголовки" = Table.PromoteHeaders(Sales_Raw_Sheet, [PromoteAllScalars=true]),
+		    #"Удаленные пустые строки" = Table.SelectRows(#"Повышенные заголовки", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+		    #"Тип текстовых полей" = Table.TransformColumnTypes(#"Удаленные пустые строки",{{"OrderID", Int64.Type}, {"CustomerID", type text}, {"CustomerName", type text}, {"City", type text}, {"Region", type text}, {"ProductCode", type text}, {"ProductName", type text}, {"Category", type text}, {"PaymentMethod", type text}, {"Manager", type text}, {"Status", type text}}),
+		    #"Обрезанный текст" = Table.TransformColumns(#"Тип текстовых полей",{{"CustomerName", Text.Trim, type text}, {"City", Text.Trim, type text}, {"Region", Text.Trim, type text}, {"PaymentMethod", Text.Trim, type text}, {"Manager", Text.Trim, type text}, {"Status", Text.Trim, type text}}),
+		    #"Очищенный текст" = Table.TransformColumns(#"Обрезанный текст",{{"CustomerName", Text.Clean, type text}, {"City", Text.Clean, type text}}),
+		    #"Двойные пробелы в CustomerName" = Table.ReplaceValue(#"Очищенный текст","  "," ",Replacer.ReplaceText,{"CustomerName"}),
+		    #"Замененное значение N/A" = Table.ReplaceValue(#"Двойные пробелы в CustomerName","N/A",null,Replacer.ReplaceValue,{"OrderDate", "UnitPrice", "Discount", "SalesAmount", "Status"}),
+		    #"Замененное значение -" = Table.ReplaceValue(#"Замененное значение N/A","-",null,Replacer.ReplaceValue,{"UnitPrice", "Discount", "SalesAmount"}),
+		    #"Замененное значение error" = Table.ReplaceValue(#"Замененное значение -","error",null,Replacer.ReplaceValue,{"SalesAmount"}),
+		    #"Замененное значение wrong" = Table.ReplaceValue(#"Замененное значение error","wrong",null,Replacer.ReplaceValue,{"OrderDate"}),
+		    #"Каждое слово с прописной буквы" = Table.TransformColumns(#"Замененное значение wrong",{{"CustomerName", Text.Proper, type text}, {"City", Text.Proper, type text}, {"Region", Text.Proper, type text}, {"Status", Text.Proper, type text}}),
+		    #"Единый PaymentMethod" = Table.TransformColumns(#"Каждое слово с прописной буквы",{{"PaymentMethod", each let u = Text.Upper(_) in if u = "CARD" or u = "BANK CARD" then "Card" else if u = "CASH" then "Cash" else if u = "KASPI QR" then "Kaspi QR" else if u = "QR" then "QR" else _, type text}}),
+		    #"Discount из текста" = Table.TransformColumns(#"Единый PaymentMethod",{{"Discount", each if _ is text then Number.From(Text.Remove(_, {" ", "%"})) / 100 else _}}),
+		    #"SalesAmount из текста" = Table.TransformColumns(#"Discount из текста",{{"SalesAmount", each if _ is text then Number.From(Text.Trim(_)) else _}}),
+		    #"OrderDate из разных форматов" = Table.TransformColumns(#"SalesAmount из текста",{{"OrderDate", each if _ = null then null else if _ is date then _ else if _ is datetime then DateTime.Date(_) else try Date.FromText(_, [Format="dd.MM.yyyy"]) otherwise try Date.FromText(_, [Format="yyyy-MM-dd"]) otherwise try Date.FromText(_, [Format="dd/MM/yyyy"]) otherwise null, type date}}),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"OrderDate из разных форматов",{{"Quantity", Int64.Type}, {"UnitPrice", type number}, {"Discount", type number}, {"SalesAmount", type number}}),
+		    #"Замененные ошибки" = Table.ReplaceErrorValues(#"Измененный тип", {{"UnitPrice", null}}),
+		    #"Удаленные дубликаты" = Table.Distinct(#"Замененные ошибки")
+		in
+		    #"Удаленные дубликаты"
+	lineageTag: f3b3604e-6ece-4d85-9e0e-71aa72f6c0d4
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table
+
+expression stg_Products =
+		let
+		    Источник = src_Excel,
+		    Products_Sheet = Источник{[Item="Products",Kind="Sheet"]}[Data],
+		    #"Повышенные заголовки" = Table.PromoteHeaders(Products_Sheet, [PromoteAllScalars=true]),
+		    #"Удаленные пустые строки" = Table.SelectRows(#"Повышенные заголовки", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"Удаленные пустые строки",{{"ProductCode", type text}, {"ProductName", type text}, {"Category", type text}, {"StandardPrice", Int64.Type}, {"SupplierCode", type text}}),
+		    #"Дублированный столбец" = Table.DuplicateColumn(#"Измененный тип", "ProductCode", "ProductCode - копия"),
+		    #"Разделить столбец по разделителю" = Table.SplitColumn(#"Дублированный столбец", "ProductCode - копия", Splitter.SplitTextByDelimiter("-", QuoteStyle.Csv), {"DepartmentCode", "ProductTypeCode", "ProductNumber"}),
+		    #"Измененный тип1" = Table.TransformColumnTypes(#"Разделить столбец по разделителю",{{"DepartmentCode", type text}, {"ProductTypeCode", type text}, {"ProductNumber", type text}}),
+		    #"Объединенные столбцы" = Table.CombineColumns(#"Измененный тип1",{"DepartmentCode", "ProductTypeCode"},Combiner.CombineTextByDelimiter("-", QuoteStyle.None),"ProductGroupCode"),
+		    #"Вставленный текст между разделителями" = Table.AddColumn(#"Объединенные столбцы", "ProductTypeFromExample", each Text.BetweenDelimiters([ProductCode], "-", "-"), type text)
+		in
+		    #"Вставленный текст между разделителями"
+	lineageTag: aaf69839-0b88-4ba1-a533-da48680e8249
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table
+
+expression stg_Regions =
+		let
+		    Источник = src_Excel,
+		    Regions_Sheet = Источник{[Item="Regions",Kind="Sheet"]}[Data],
+		    #"Повышенные заголовки" = Table.PromoteHeaders(Regions_Sheet, [PromoteAllScalars=true]),
+		    #"Удаленные пустые строки" = Table.SelectRows(#"Повышенные заголовки", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"Удаленные пустые строки",{{"Region", type text}, {"City", type text}, {"RegionalManager", type text}}),
+		    #"Заполнено вниз" = Table.FillDown(#"Измененный тип",{"Region", "RegionalManager"})
+		in
+		    #"Заполнено вниз"
+	lineageTag: d115ebe2-5040-40fd-b9c5-087a0323b4d8
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table
+
+expression stg_MonthlySales =
+		let
+		    Источник = src_Excel,
+		    Monthly_Sales_Sheet = Источник{[Item="Monthly_Sales",Kind="Sheet"]}[Data],
+		    #"Повышенные заголовки" = Table.PromoteHeaders(Monthly_Sales_Sheet, [PromoteAllScalars=true]),
+		    #"Удаленные пустые строки" = Table.SelectRows(#"Повышенные заголовки", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"Удаленные пустые строки",{{"Product", type text}, {"Jan", Int64.Type}, {"Feb", Int64.Type}, {"Mar", Int64.Type}, {"Apr", Int64.Type}, {"May", Int64.Type}, {"Jun", Int64.Type}, {"Jul", Int64.Type}, {"Aug", Int64.Type}})
+		in
+		    #"Измененный тип"
+	lineageTag: 05b546d0-d018-4184-8c8d-2ec0e6295967
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table

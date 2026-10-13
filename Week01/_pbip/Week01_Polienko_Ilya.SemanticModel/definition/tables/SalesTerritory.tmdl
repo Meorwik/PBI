@@ -1,0 +1,50 @@
+table SalesTerritory
+	lineageTag: 373777c6-2b20-4dbf-9b1e-b686507c3220
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b145300-80b9-43f5-817e-bc47c2ceba1e
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 9328e771-8168-4a52-b244-3af2bfc10c23
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 40a7ef80-74f8-4085-9d51-8fa74c719e26
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 10938418-55b9-4576-a2b7-dfacb448a84b
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SalesTerritory = m
+		mode: import
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents("Z:\Week01\AdventureWorks Sales.xlsx"), null, true),
+				    SalesTerritory_Table = Источник{[Item="SalesTerritory",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(SalesTerritory_Table,{{"SalesTerritoryKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_NavigationStepName = Навигация
+
+	annotation PBI_ResultType = Table
+

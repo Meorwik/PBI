@@ -1,0 +1,92 @@
+table Product
+	lineageTag: e920b1a9-08b0-4925-9c0c-092ca53d1ea7
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e5fa6a5-c26d-447a-8ccd-3970e3ac273f
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: dfd53a73-fc12-4d88-ac2c-3d39ca33c090
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 922bf07e-845c-4deb-915d-b52b5cc16166
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Standard Cost'
+		dataType: double
+		lineageTag: d5d4ca4c-4566-4ea0-8fc3-3a8add8f4293
+		summarizeBy: none
+		sourceColumn: Standard Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Color
+		dataType: string
+		lineageTag: b06558cf-5d2a-4cf6-87cd-498605801146
+		summarizeBy: none
+		sourceColumn: Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'List Price'
+		dataType: double
+		lineageTag: 3e1229e3-103d-439c-8aa2-2a3a00ea24ec
+		summarizeBy: none
+		sourceColumn: List Price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Model
+		dataType: string
+		lineageTag: 22354dc1-10ff-42e7-bf6a-7a3409e6730b
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcategory
+		dataType: string
+		lineageTag: a7287cb6-3307-4f07-97f4-0a95e2bfd2a5
+		summarizeBy: none
+		sourceColumn: Subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 4dd9a912-8ac1-4653-ab00-16c76b59253a
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents("Z:\Week01\AdventureWorks Sales.xlsx"), null, true),
+				    Product_Table = Источник{[Item="Product",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(Product_Table,{{"ProductKey", Int64.Type}, {"SKU", type text}, {"Product", type text}, {"Standard Cost", type number}, {"Color", type text}, {"List Price", type number}, {"Model", type text}, {"Subcategory", type text}, {"Category", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,56 @@
+table Sales_By_City
+	lineageTag: ec6058b2-0030-465b-b926-327f621e3a8d
+
+	column City
+		dataType: string
+		lineageTag: ae0bf8e4-0abe-434b-b992-7d45e3be9bee
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalSales
+		dataType: double
+		lineageTag: 9c58d8e1-328b-40b1-be1b-294a31c61870
+		summarizeBy: sum
+		sourceColumn: TotalSales
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvgSales
+		dataType: double
+		lineageTag: 24227190-693c-46b9-85d7-87afcee46581
+		summarizeBy: sum
+		sourceColumn: AvgSales
+
+		annotation SummarizationSetBy = Automatic
+
+	column RowsCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 281a1aa4-629e-4343-818a-f8643e84de80
+		summarizeBy: sum
+		sourceColumn: RowsCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaxSales
+		dataType: double
+		lineageTag: 763d4048-7123-41e4-abac-fe0fdf8fac79
+		summarizeBy: sum
+		sourceColumn: MaxSales
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales_By_City = m
+		mode: import
+		queryGroup: '20_ANALYSIS'
+		source =
+				let
+				    Источник = FactSales,
+				    #"Сгруппированные строки" = Table.Group(Источник, {"City"}, {{"TotalSales", each List.Sum([SalesAmount]), type nullable number}, {"AvgSales", each List.Average([SalesAmount]), type nullable number}, {"RowsCount", each Table.RowCount(_), Int64.Type}, {"MaxSales", each List.Max([SalesAmount]), type nullable number}}),
+				    #"Сортированные строки" = Table.Sort(#"Сгруппированные строки",{{"TotalSales", Order.Descending}})
+				in
+				    #"Сортированные строки"
+
+	annotation PBI_ResultType = Table
