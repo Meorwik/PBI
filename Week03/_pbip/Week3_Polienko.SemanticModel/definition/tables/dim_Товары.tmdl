@@ -1,0 +1,55 @@
+table 'dim_Товары'
+	lineageTag: 9ee2c198-76c8-46b7-94e6-d750ab8bbd9f
+
+	column 'Код_товара'
+		dataType: string
+		lineageTag: 6f68b38d-5650-46a6-8bf7-07002f74fa59
+		summarizeBy: none
+		sourceColumn: Код_товара
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Товар'
+		dataType: string
+		lineageTag: ab3c5959-8f5b-416b-9983-51dc6fb9cafd
+		summarizeBy: none
+		sourceColumn: Товар
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Категория'
+		dataType: string
+		lineageTag: d5166ed6-1b4d-4e11-9a15-a300585ab2b2
+		summarizeBy: none
+		sourceColumn: Категория
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Бренд'
+		dataType: string
+		lineageTag: ca369020-309b-4ab6-8c1a-2221f015cba2
+		summarizeBy: none
+		sourceColumn: Бренд
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Базовая_цена'
+		dataType: double
+		lineageTag: d4587d55-2553-445c-a900-a9a059fe2192
+		summarizeBy: sum
+		sourceColumn: Базовая_цена
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_Товары' = m
+		mode: import
+		queryGroup: '02_Staging'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pReferenceFile), null, true),
+				    Products_Table = Источник{[Item="Products",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(Products_Table,{{"Код_товара", type text}, {"Товар", type text}, {"Категория", type text}, {"Бренд", type text}, {"Базовая_цена", type number}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

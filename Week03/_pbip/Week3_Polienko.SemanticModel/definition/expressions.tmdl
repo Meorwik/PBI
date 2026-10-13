@@ -1,0 +1,132 @@
+expression pFolderPath = "Z:\Week03\01_Продажи_по_месяцам\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3188cd3f-1731-4bbb-a780-fb29a21ae6f6
+	queryGroup: '00_Параметры'
+
+	annotation PBI_ResultType = Text
+
+expression pReferenceFile = "Z:\Week03\Справочники_и_план.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: c604f931-23e6-454b-ab91-5ed60ae04f25
+	queryGroup: '00_Параметры'
+
+	annotation PBI_ResultType = Text
+
+expression 'Пример файла' =
+		let
+		    Источник = Folder.Files(pFolderPath),
+		    Навигация1 = Источник{0}[Content]
+		in
+		    Навигация1
+	lineageTag: 53c53115-5003-402c-8320-b4dffc1a1765
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Параметр1' =
+		#"Пример файла" meta [IsParameterQuery=true, BinaryIdentifier=#"Пример файла", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 4b82a7b3-24fa-416c-be01-91b895681fce
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Преобразовать пример файла' =
+		let
+		    Источник = Excel.Workbook(Параметр1, null, true),
+		    SalesTable_Table = Источник{[Item="SalesTable",Kind="Table"]}[Data]
+		in
+		    SalesTable_Table
+	lineageTag: 2712d801-8a0e-4770-b5e8-584c51f8faf0
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Table
+
+expression 'Преобразовать файл' =
+		let
+		    Источник = (Параметр1 as binary) => let
+		            Источник = Excel.Workbook(Параметр1, null, true),
+		            SalesTable_Table = Источник{[Item="SalesTable",Kind="Table"]}[Data]
+		        in
+		            SalesTable_Table
+		in
+		    Источник
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Преобразовать пример файла""}" ]
+	lineageTag: 86a838e7-7ca8-4640-8088-1a63d932e1e2
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Function
+
+expression 'fnСуммаПослеСкидки' =
+		(qty as number, price as number, discount as number) as number =>
+		    Number.Round(qty * price * (1 - discount), 2)
+	lineageTag: 1d1db83a-e0dd-4516-b8f0-b84415260601
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Function
+
+expression 'fnТипОперации' =
+		(qty as number) as text =>
+		    if qty < 0 then "Возврат" else "Продажа"
+	lineageTag: 7a3b817c-f4d1-4656-a1cf-0719591621ff
+	queryGroup: '01_Служебные'
+
+	annotation PBI_ResultType = Function
+
+expression 'stg_ФайлыПродаж' =
+		let
+		    Источник = Folder.Files(pFolderPath),
+		    #"Строки с примененным фильтром" = Table.SelectRows(Источник, each [Extension] = ".xlsx" and not Text.StartsWith([Name], "~$")),
+		    #"Вызвать настраиваемую функцию1" = Table.AddColumn(#"Строки с примененным фильтром", "Преобразовать файл", each #"Преобразовать файл"([Content])),
+		    #"Переименованные столбцы1" = Table.RenameColumns(#"Вызвать настраиваемую функцию1", {"Name", "Source.Name"}),
+		    #"Другие удаленные столбцы1" = Table.SelectColumns(#"Переименованные столбцы1", {"Source.Name", "Преобразовать файл"}),
+		    #"Развернутый столбец таблицы1" = Table.ExpandTableColumn(#"Другие удаленные столбцы1", "Преобразовать файл", Table.ColumnNames(#"Преобразовать файл"(#"Пример файла"))),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"Развернутый столбец таблицы1",{{"Source.Name", type text}, {"Код_заказа", type text}, {"Дата", type date}, {"Код_товара", type text}, {"Код_магазина", type text}, {"Количество", Int64.Type}, {"Цена", type number}, {"Скидка", type number}, {"Канал", type text}, {"Менеджер", type text}, {"Статус", type text}})
+		in
+		    #"Измененный тип"
+	lineageTag: 583192ef-17bb-4f4c-bfb5-8c9cf54e0547
+	queryGroup: '02_Staging'
+
+	annotation PBI_ResultType = Table
+
+expression 'stg_Январь' =
+		let
+		    Источник = Excel.Workbook(File.Contents(pFolderPath & "Продажи_01_2026.xlsx"), null, true),
+		    SalesTable_Table = Источник{[Item="SalesTable",Kind="Table"]}[Data],
+		    #"Измененный тип" = Table.TransformColumnTypes(SalesTable_Table,{{"Код_заказа", type text}, {"Дата", type date}, {"Код_товара", type text}, {"Код_магазина", type text}, {"Количество", Int64.Type}, {"Цена", type number}, {"Скидка", type number}, {"Канал", type text}, {"Менеджер", type text}, {"Статус", type text}})
+		in
+		    #"Измененный тип"
+	lineageTag: cb64ebb9-79fa-4349-94e4-5f43420b8deb
+	queryGroup: '02_Staging'
+
+	annotation PBI_ResultType = Table
+
+expression 'stg_Февраль' =
+		let
+		    Источник = Excel.Workbook(File.Contents(pFolderPath & "Продажи_02_2026.xlsx"), null, true),
+		    SalesTable_Table = Источник{[Item="SalesTable",Kind="Table"]}[Data],
+		    #"Измененный тип" = Table.TransformColumnTypes(SalesTable_Table,{{"Код_заказа", type text}, {"Дата", type date}, {"Код_товара", type text}, {"Код_магазина", type text}, {"Количество", Int64.Type}, {"Цена", type number}, {"Скидка", type number}, {"Канал", type text}, {"Менеджер", type text}, {"Статус", type text}})
+		in
+		    #"Измененный тип"
+	lineageTag: 42d42598-a6f2-46b6-a864-978a10c9c16d
+	queryGroup: '02_Staging'
+
+	annotation PBI_ResultType = Table
+
+expression 'test_Append_ЯнФев' =
+		let
+		    Источник = Table.Combine({stg_Январь, stg_Февраль})
+		in
+		    Источник
+	lineageTag: 99bd6ad2-c641-4417-8307-c63f1bf8ecf7
+	queryGroup: '03_Контроль'
+
+	annotation PBI_ResultType = Table
+
+expression 'test_Merge_Товары' =
+		let
+		    Источник = Table.NestedJoin(test_Append_ЯнФев, {"Код_товара"}, dim_Товары, {"Код_товара"}, "dim_Товары", JoinKind.LeftOuter),
+		    #"Развернутый элемент dim_Товары" = Table.ExpandTableColumn(Источник, "dim_Товары", {"Товар", "Категория", "Бренд"}, {"Товар", "Категория", "Бренд"})
+		in
+		    #"Развернутый элемент dim_Товары"
+	lineageTag: 26cea328-bf72-41d9-9675-d36b63047a68
+	queryGroup: '03_Контроль'
+
+	annotation PBI_ResultType = Table

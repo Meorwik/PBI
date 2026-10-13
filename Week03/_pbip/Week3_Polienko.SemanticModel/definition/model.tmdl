@@ -1,0 +1,40 @@
+model Model
+	culture: ru-RU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ru-RU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup '00_Параметры'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup '01_Служебные'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup '02_Staging'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup '03_Контроль'
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup '04_Модель'
+
+	annotation PBI_QueryGroupOrder = 4
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["pFolderPath", "pReferenceFile", "Пример файла", "Параметр1", "Преобразовать пример файла", "Преобразовать файл", "fnСуммаПослеСкидки", "fnТипОперации", "stg_ФайлыПродаж", "dim_Товары", "dim_Магазины", "stg_Январь", "stg_Февраль", "test_Append_ЯнФев", "test_Merge_Товары", "Продажи", "dq_НеизвестныеТовары", "dq_НеизвестныеМагазины", "dq_РасхожденияСтатуса"]
+
+ref table 'dim_Товары'
+ref table 'dim_Магазины'
+ref table 'Продажи'
+ref table 'dq_НеизвестныеТовары'
+ref table 'dq_НеизвестныеМагазины'
+ref table 'dq_РасхожденияСтатуса'
+
+ref cultureInfo ru-RU

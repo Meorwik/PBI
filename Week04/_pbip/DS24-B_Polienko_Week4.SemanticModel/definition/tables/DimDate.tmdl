@@ -1,0 +1,65 @@
+table DimDate
+	lineageTag: c27ebe94-ea9f-41b3-8c06-1c9afbb4cd87
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f82b9101-f061-4368-8926-d6b439e393de
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 7000b3a1-fbd4-42b3-b60c-a8bb927681ca
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 639c135c-7c4b-4e54-83dc-b7d9508b093a
+		summarizeBy: sum
+		sourceColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: dd6cfb8b-a0bb-4a8c-8ac8-1d2678c25398
+		summarizeBy: none
+		sourceColumn: MonthName
+		sortByColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 649228a2-de8b-4da6-8ade-c266b47674ed
+		summarizeBy: sum
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"OrderDate"}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Другие удаленные столбцы", {"OrderDate"}),
+				    #"Вставленный год" = Table.AddColumn(#"Удаленные дубликаты", "Year", each Date.Year([OrderDate]), Int64.Type),
+				    #"Вставленный месяц" = Table.AddColumn(#"Вставленный год", "MonthNo", each Date.Month([OrderDate]), Int64.Type),
+				    #"Вставленное название месяца" = Table.AddColumn(#"Вставленный месяц", "MonthName", each Date.MonthName([OrderDate], "ru-RU"), type text),
+				    #"Вставленный квартал" = Table.AddColumn(#"Вставленное название месяца", "Quarter", each Date.QuarterOfYear([OrderDate]), Int64.Type),
+				    #"Сортированные строки" = Table.Sort(#"Вставленный квартал",{{"OrderDate", Order.Ascending}})
+				in
+				    #"Сортированные строки"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "3dfcaf400ec849549bd2",
+  "position": {
+    "x": 20,
+    "y": 100,
+    "z": 1000,
+    "height": 900,
+    "width": 920,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "multiRowCard",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "PK DimProduct rows | distinct"
+                }
+              },
+              "queryRef": "FactSales.PK DimProduct rows | distinct",
+              "nativeQueryRef": "PK DimProduct rows | distinct"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "PK DimCustomer rows | distinct"
+                }
+              },
+              "queryRef": "FactSales.PK DimCustomer rows | distinct",
+              "nativeQueryRef": "PK DimCustomer rows | distinct"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "PK DimStore rows | distinct"
+                }
+              },
+              "queryRef": "FactSales.PK DimStore rows | distinct",
+              "nativeQueryRef": "PK DimStore rows | distinct"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "PK DimManager rows | distinct"
+                }
+              },
+              "queryRef": "FactSales.PK DimManager rows | distinct",
+              "nativeQueryRef": "PK DimManager rows | distinct"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "PK DimDate rows | distinct"
+                }
+              },
+              "queryRef": "FactSales.PK DimDate rows | distinct",
+              "nativeQueryRef": "PK DimDate rows | distinct"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Primary Keys'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

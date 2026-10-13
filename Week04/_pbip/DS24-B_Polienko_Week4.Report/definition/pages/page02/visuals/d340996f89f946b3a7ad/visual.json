@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "d340996f89f946b3a7ad",
+  "position": {
+    "x": 960,
+    "y": 100,
+    "z": 2000,
+    "height": 900,
+    "width": 940,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "multiRowCard",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "FK missing Product"
+                }
+              },
+              "queryRef": "FactSales.FK missing Product",
+              "nativeQueryRef": "FK missing Product"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "FK missing Customer"
+                }
+              },
+              "queryRef": "FactSales.FK missing Customer",
+              "nativeQueryRef": "FK missing Customer"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "FK missing Store"
+                }
+              },
+              "queryRef": "FactSales.FK missing Store",
+              "nativeQueryRef": "FK missing Store"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "FK missing Manager"
+                }
+              },
+              "queryRef": "FactSales.FK missing Manager",
+              "nativeQueryRef": "FK missing Manager"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "FK missing Date"
+                }
+              },
+              "queryRef": "FactSales.FK missing Date",
+              "nativeQueryRef": "FK missing Date"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Foreign Keys без пары'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

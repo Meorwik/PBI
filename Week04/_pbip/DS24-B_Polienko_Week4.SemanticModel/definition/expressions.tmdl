@@ -1,0 +1,18 @@
+expression pSourceFile = "Z:\Week04\PowerBI_Week4_Flat_Sales_Student.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 2c588cce-9e87-4919-93d0-d40c34bb1b33
+	queryGroup: 'Параметры'
+
+	annotation PBI_ResultType = Text
+
+expression stg_Sales_Flat =
+		let
+		    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+		    Sales_Flat_Sheet = Источник{[Item="Sales_Flat",Kind="Sheet"]}[Data],
+		    #"Повышенные заголовки" = Table.PromoteHeaders(Sales_Flat_Sheet, [PromoteAllScalars=true]),
+		    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"SalesLineID", type text}, {"OrderID", Int64.Type}, {"OrderDate", type date}, {"ProductID", type text}, {"ProductName", type text}, {"CategoryID", type text}, {"CategoryName", type text}, {"Brand", type text}, {"CustomerID", type text}, {"CustomerName", type text}, {"CustomerSegment", type text}, {"CustomerCityID", type text}, {"CustomerCity", type text}, {"CustomerRegionID", type text}, {"CustomerRegion", type text}, {"StoreID", type text}, {"StoreName", type text}, {"StoreCityID", type text}, {"StoreCity", type text}, {"StoreRegionID", type text}, {"StoreRegion", type text}, {"ManagerID", type text}, {"ManagerName", type text}, {"Quantity", Int64.Type}, {"UnitPrice", Currency.Type}, {"DiscountPct", Percentage.Type}, {"SalesAmount", Currency.Type}, {"CostAmount", Currency.Type}, {"ProfitAmount", Currency.Type}})
+		in
+		    #"Измененный тип"
+	lineageTag: fcad70cb-a529-4bea-9751-f10654c0e3bf
+	queryGroup: '00_STAGING'
+
+	annotation PBI_ResultType = Table

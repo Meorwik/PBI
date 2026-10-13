@@ -1,0 +1,19 @@
+relationship 371d84c2-c80b-4975-8e93-43e029275760
+	fromColumn: FactSales.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship f10da52a-118c-4e10-aefa-e67280727dcc
+	fromColumn: FactSales.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship e4ed80e0-7339-4bfa-890f-add4f6ad1ac9
+	fromColumn: FactSales.StoreID
+	toColumn: DimStore.StoreID
+
+relationship 1ed247ed-e671-4ae3-b4c8-05a3d7a810c1
+	fromColumn: FactSales.ManagerID
+	toColumn: DimManager.ManagerID
+
+relationship 8c74d464-87f1-49e2-8fb8-47ec540e21c1
+	fromColumn: FactSales.OrderDate
+	toColumn: DimDate.OrderDate

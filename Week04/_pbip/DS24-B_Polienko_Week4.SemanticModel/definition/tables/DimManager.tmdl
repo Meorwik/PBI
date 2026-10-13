@@ -1,0 +1,32 @@
+table DimManager
+	lineageTag: 25ba7a8f-1f02-4f2f-873f-54acdbe21de6
+
+	column ManagerID
+		dataType: string
+		isHidden
+		lineageTag: de840294-59c1-4023-ac5e-9bb3ecee90cb
+		summarizeBy: none
+		sourceColumn: ManagerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManagerName
+		dataType: string
+		lineageTag: e780c871-a401-495a-9521-445a32f1f33d
+		summarizeBy: none
+		sourceColumn: ManagerName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimManager = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"ManagerID", "ManagerName"}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Другие удаленные столбцы", {"ManagerID"})
+				in
+				    #"Удаленные дубликаты"
+
+	annotation PBI_ResultType = Table

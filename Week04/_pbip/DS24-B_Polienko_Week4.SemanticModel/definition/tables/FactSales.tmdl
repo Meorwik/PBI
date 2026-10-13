@@ -1,0 +1,175 @@
+table FactSales
+	lineageTag: a72159d6-8def-4d9c-988e-5e503081d3e7
+
+	measure 'Total Sales' = SUM(FactSales[SalesAmount])
+		formatString: #,0
+		lineageTag: 8752a63a-affc-42e9-b87a-0ea3acbd2f31
+
+	measure 'Total Profit' = SUM(FactSales[ProfitAmount])
+		formatString: #,0
+		lineageTag: 4cc0003b-8e63-4f09-adc7-469836f1df3c
+
+	measure 'Sales Lines' = COUNTROWS(FactSales)
+		lineageTag: b2b92500-fafa-4c10-91b1-71e8bb0dcf18
+
+	measure Orders = DISTINCTCOUNT(FactSales[OrderID])
+		lineageTag: ec9d5ff7-0d45-4f04-9b44-3b57e52b0215
+
+	measure 'PK DimProduct rows | distinct' = COUNTROWS(DimProduct) & " | " & DISTINCTCOUNT(DimProduct[ProductID])
+		lineageTag: 4cbe22cd-967d-4964-a1ce-2c486cdec8f0
+
+	measure 'PK DimCustomer rows | distinct' = COUNTROWS(DimCustomer) & " | " & DISTINCTCOUNT(DimCustomer[CustomerID])
+		lineageTag: 7132bac5-a022-4c34-92cb-8d5b2f23df83
+
+	measure 'PK DimStore rows | distinct' = COUNTROWS(DimStore) & " | " & DISTINCTCOUNT(DimStore[StoreID])
+		lineageTag: 5f0d2f6f-f691-4d09-87e5-cb1b286b91e2
+
+	measure 'PK DimManager rows | distinct' = COUNTROWS(DimManager) & " | " & DISTINCTCOUNT(DimManager[ManagerID])
+		lineageTag: 48dac4aa-80dd-46af-8461-a75dec857b68
+
+	measure 'PK DimDate rows | distinct' = COUNTROWS(DimDate) & " | " & DISTINCTCOUNT(DimDate[OrderDate])
+		lineageTag: 773f9c47-58fb-4e69-9472-83357d1e696b
+
+	measure 'FK missing Product' = COUNTROWS(FILTER(FactSales, ISBLANK(RELATED(DimProduct[ProductID])))) + 0
+		lineageTag: 00870a45-3ff6-47e5-a908-d53c94c64fea
+
+	measure 'FK missing Customer' = COUNTROWS(FILTER(FactSales, ISBLANK(RELATED(DimCustomer[CustomerID])))) + 0
+		lineageTag: cdf475ae-3a47-4da6-ab15-be2bf8fdfdbb
+
+	measure 'FK missing Store' = COUNTROWS(FILTER(FactSales, ISBLANK(RELATED(DimStore[StoreID])))) + 0
+		lineageTag: 8c86db6b-1e02-4286-98de-965978dd72e6
+
+	measure 'FK missing Manager' = COUNTROWS(FILTER(FactSales, ISBLANK(RELATED(DimManager[ManagerID])))) + 0
+		lineageTag: 877dca58-b399-4549-9798-76cab46083a8
+
+	measure 'FK missing Date' = COUNTROWS(FILTER(FactSales, ISBLANK(RELATED(DimDate[OrderDate])))) + 0
+		lineageTag: 24170d48-3cd8-488d-9d8a-9a1a0611c615
+
+	column SalesLineID
+		dataType: string
+		isHidden
+		lineageTag: 37e77dae-b3bf-43b7-a076-a68eefcb5704
+		summarizeBy: none
+		sourceColumn: SalesLineID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d457f0b-7c74-4b54-b846-4bbaefe1e34a
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: fa188618-1097-44ef-8cd9-e52a26ecb2b7
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: 6a60c941-73fa-46bb-aaa7-24f4c0f7f0e4
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: bf4d553d-1646-459c-93cd-6e847f938d71
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: 44f0b2dd-41f7-4f21-ba66-08ad083cce57
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManagerID
+		dataType: string
+		isHidden
+		lineageTag: 895da24b-587f-47e8-b32d-d1f52f367642
+		summarizeBy: none
+		sourceColumn: ManagerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d278e1f-855b-44f5-9845-1375cf0f380d
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		formatString: #,0
+		lineageTag: 8c794228-131b-4b4a-90ad-f4ae90a3c272
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: double
+		formatString: 0%
+		lineageTag: cdba73db-28b9-497b-8b13-ab880dde9f43
+		summarizeBy: sum
+		sourceColumn: DiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 9fbf4ee6-cc4c-4318-9760-2f4425b73294
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: cc20ccb3-8ebe-46e0-988d-49fb6cc9311c
+		summarizeBy: sum
+		sourceColumn: CostAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProfitAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: ce0be699-2dee-460e-9c98-262d605e12eb
+		summarizeBy: sum
+		sourceColumn: ProfitAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"SalesLineID", "OrderID", "OrderDate", "ProductID", "CustomerID", "StoreID", "ManagerID", "Quantity", "UnitPrice", "DiscountPct", "SalesAmount", "CostAmount", "ProfitAmount"})
+				in
+				    #"Другие удаленные столбцы"
+
+	annotation PBI_ResultType = Table

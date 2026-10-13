@@ -1,0 +1,56 @@
+table DimProduct
+	lineageTag: b9b8b04b-0e95-4b13-83e1-bc37606f99c7
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: d605c683-5382-4ee5-a5ef-05e808eaf76e
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: a53d0063-56ca-4bc7-8317-296e8ebff44e
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: 60dc6562-c429-4827-a202-881aca07c0d4
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: 532511cf-1549-4b56-844d-8358b77a1263
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: d373b61a-beff-4e68-82a9-43ac22116ce0
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"ProductID", "ProductName", "CategoryID", "CategoryName", "Brand"}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Другие удаленные столбцы", {"ProductID"})
+				in
+				    #"Удаленные дубликаты"
+
+	annotation PBI_ResultType = Table

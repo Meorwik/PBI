@@ -1,0 +1,64 @@
+table DimStore
+	lineageTag: 5a143323-a792-458b-bacd-aad5bea9b575
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: c6aae102-9542-4971-9ecb-a3ce58cbb669
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreName
+		dataType: string
+		lineageTag: af37c2ac-13b1-4955-bf0b-3e5bfdcc943a
+		summarizeBy: none
+		sourceColumn: StoreName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreCityID
+		dataType: string
+		lineageTag: 36b26dd2-e561-4bd1-b5cb-856de47a1dac
+		summarizeBy: none
+		sourceColumn: StoreCityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreCity
+		dataType: string
+		lineageTag: d9dec05d-4596-47cc-a0fc-62f08d578f2c
+		summarizeBy: none
+		sourceColumn: StoreCity
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreRegionID
+		dataType: string
+		lineageTag: 11e38a9b-1fe1-43ca-91af-4fa4253363e9
+		summarizeBy: none
+		sourceColumn: StoreRegionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreRegion
+		dataType: string
+		lineageTag: 2339edfd-9ca6-46f5-9c78-39370422c338
+		summarizeBy: none
+		sourceColumn: StoreRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimStore = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"StoreID", "StoreName", "StoreCityID", "StoreCity", "StoreRegionID", "StoreRegion"}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Другие удаленные столбцы", {"StoreID"})
+				in
+				    #"Удаленные дубликаты"
+
+	annotation PBI_ResultType = Table

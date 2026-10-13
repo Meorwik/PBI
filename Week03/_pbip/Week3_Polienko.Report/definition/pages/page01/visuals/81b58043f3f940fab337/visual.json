@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "81b58043f3f940fab337",
+  "position": {
+    "x": 940,
+    "y": 280,
+    "z": 7000,
+    "height": 380,
+    "width": 960,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Продажи"
+                    }
+                  },
+                  "Property": "Категория"
+                }
+              },
+              "queryRef": "Продажи.Категория",
+              "nativeQueryRef": "Категория"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Продажи"
+                    }
+                  },
+                  "Property": "Выручка после скидки"
+                }
+              },
+              "queryRef": "Продажи.Выручка после скидки",
+              "nativeQueryRef": "Выручка после скидки"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Продажи"
+                  }
+                },
+                "Property": "Выручка после скидки"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Выручка по категориям (Merge с dim_Товары)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

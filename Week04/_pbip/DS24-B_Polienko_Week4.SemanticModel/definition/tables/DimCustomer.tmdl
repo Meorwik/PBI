@@ -1,0 +1,72 @@
+table DimCustomer
+	lineageTag: c2cdd8b1-a969-4730-a7f8-862f1de27372
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: 65aed608-31a9-45d3-9983-a16f91751286
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: 99174fb9-596f-4dc1-9f3e-974c5d65e700
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerSegment
+		dataType: string
+		lineageTag: 83684966-f685-428e-a703-341ef6780f01
+		summarizeBy: none
+		sourceColumn: CustomerSegment
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerCityID
+		dataType: string
+		lineageTag: 02fee0a6-f03c-4551-a23c-b62b52ed7527
+		summarizeBy: none
+		sourceColumn: CustomerCityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerCity
+		dataType: string
+		lineageTag: 7b19c352-d36e-4b3d-99df-18d20edde149
+		summarizeBy: none
+		sourceColumn: CustomerCity
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerRegionID
+		dataType: string
+		lineageTag: 6be12702-fe94-4699-aace-fdb9b6d2b907
+		summarizeBy: none
+		sourceColumn: CustomerRegionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerRegion
+		dataType: string
+		lineageTag: 0770fa94-488e-404e-9ed3-2ad5b8db62e0
+		summarizeBy: none
+		sourceColumn: CustomerRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCustomer = m
+		mode: import
+		queryGroup: '10_MODEL'
+		source =
+				let
+				    Источник = stg_Sales_Flat,
+				    #"Другие удаленные столбцы" = Table.SelectColumns(Источник,{"CustomerID", "CustomerName", "CustomerSegment", "CustomerCityID", "CustomerCity", "CustomerRegionID", "CustomerRegion"}),
+				    #"Удаленные дубликаты" = Table.Distinct(#"Другие удаленные столбцы", {"CustomerID"})
+				in
+				    #"Удаленные дубликаты"
+
+	annotation PBI_ResultType = Table

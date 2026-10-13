@@ -1,0 +1,104 @@
+table 'dq_НеизвестныеМагазины'
+	lineageTag: 9a536c45-dce4-4408-b577-1993b55c0b9e
+
+	column 'Source.Name'
+		dataType: string
+		lineageTag: 8fb27584-7b35-41d4-9819-f6687591cf8c
+		summarizeBy: none
+		sourceColumn: Source.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_заказа'
+		dataType: string
+		lineageTag: 83656af8-5933-483e-891d-5c37c95e90a7
+		summarizeBy: none
+		sourceColumn: Код_заказа
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Дата'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: af359c59-9731-4641-a2e0-7dc1ff137be7
+		summarizeBy: none
+		sourceColumn: Дата
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_товара'
+		dataType: string
+		lineageTag: b6263f4f-3b9c-4d9c-965c-66dcc5631c61
+		summarizeBy: none
+		sourceColumn: Код_товара
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_магазина'
+		dataType: string
+		lineageTag: 59ce32b4-780f-48b7-b668-512ca3343e04
+		summarizeBy: none
+		sourceColumn: Код_магазина
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Количество'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3785f9d2-fb41-435f-b984-09c34799a1ef
+		summarizeBy: sum
+		sourceColumn: Количество
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Цена'
+		dataType: double
+		lineageTag: c17cb387-d894-487e-ae1b-2e0b17449728
+		summarizeBy: sum
+		sourceColumn: Цена
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Скидка'
+		dataType: double
+		lineageTag: 96b009dd-2d4a-43dd-a8a8-16b6bda17cf5
+		summarizeBy: sum
+		sourceColumn: Скидка
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Канал'
+		dataType: string
+		lineageTag: 17a8b47a-b2a4-40e0-8d80-2f20a598c25e
+		summarizeBy: none
+		sourceColumn: Канал
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Менеджер'
+		dataType: string
+		lineageTag: bf35bbc1-f094-4b38-a144-049ea14c0095
+		summarizeBy: none
+		sourceColumn: Менеджер
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Статус'
+		dataType: string
+		lineageTag: e664902c-1469-42ad-b746-ca7185403f4f
+		summarizeBy: none
+		sourceColumn: Статус
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dq_НеизвестныеМагазины' = m
+		mode: import
+		queryGroup: '03_Контроль'
+		source =
+				let
+				    Источник = Table.NestedJoin(stg_ФайлыПродаж, {"Код_магазина"}, dim_Магазины, {"Код_магазина"}, "dim_Магазины", JoinKind.LeftAnti),
+				    #"Удаленные столбцы" = Table.RemoveColumns(Источник,{"dim_Магазины"})
+				in
+				    #"Удаленные столбцы"
+
+	annotation PBI_ResultType = Table

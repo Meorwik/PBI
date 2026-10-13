@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "2221af7e0e3f49e294bb",
+  "position": {
+    "x": 940,
+    "y": 680,
+    "z": 9000,
+    "height": 380,
+    "width": 960,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеМагазины"
+                    }
+                  },
+                  "Property": "Source.Name"
+                }
+              },
+              "queryRef": "dq_НеизвестныеМагазины.Source.Name",
+              "nativeQueryRef": "Source.Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеМагазины"
+                    }
+                  },
+                  "Property": "Код_заказа"
+                }
+              },
+              "queryRef": "dq_НеизвестныеМагазины.Код_заказа",
+              "nativeQueryRef": "Код_заказа"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеМагазины"
+                    }
+                  },
+                  "Property": "Код_товара"
+                }
+              },
+              "queryRef": "dq_НеизвестныеМагазины.Код_товара",
+              "nativeQueryRef": "Код_товара"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеМагазины"
+                    }
+                  },
+                  "Property": "Код_магазина"
+                }
+              },
+              "queryRef": "dq_НеизвестныеМагазины.Код_магазина",
+              "nativeQueryRef": "Код_магазина"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеМагазины"
+                    }
+                  },
+                  "Property": "Количество"
+                }
+              },
+              "queryRef": "dq_НеизвестныеМагазины.Количество",
+              "nativeQueryRef": "Количество"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dq_НеизвестныеМагазины (Left Anti)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

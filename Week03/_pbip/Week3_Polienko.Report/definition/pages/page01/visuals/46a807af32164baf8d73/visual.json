@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "46a807af32164baf8d73",
+  "position": {
+    "x": 20,
+    "y": 680,
+    "z": 8000,
+    "height": 380,
+    "width": 900,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеТовары"
+                    }
+                  },
+                  "Property": "Source.Name"
+                }
+              },
+              "queryRef": "dq_НеизвестныеТовары.Source.Name",
+              "nativeQueryRef": "Source.Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеТовары"
+                    }
+                  },
+                  "Property": "Код_заказа"
+                }
+              },
+              "queryRef": "dq_НеизвестныеТовары.Код_заказа",
+              "nativeQueryRef": "Код_заказа"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеТовары"
+                    }
+                  },
+                  "Property": "Код_товара"
+                }
+              },
+              "queryRef": "dq_НеизвестныеТовары.Код_товара",
+              "nativeQueryRef": "Код_товара"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеТовары"
+                    }
+                  },
+                  "Property": "Код_магазина"
+                }
+              },
+              "queryRef": "dq_НеизвестныеТовары.Код_магазина",
+              "nativeQueryRef": "Код_магазина"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dq_НеизвестныеТовары"
+                    }
+                  },
+                  "Property": "Количество"
+                }
+              },
+              "queryRef": "dq_НеизвестныеТовары.Количество",
+              "nativeQueryRef": "Количество"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dq_НеизвестныеТовары (Left Anti)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

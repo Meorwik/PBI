@@ -1,0 +1,56 @@
+table 'dq_РасхожденияСтатуса'
+	lineageTag: 5c72a800-e70a-471a-a05e-1ab202cef1e9
+
+	column 'Source.Name'
+		dataType: string
+		lineageTag: 360ad29e-8cdb-4e99-b8e9-5d28f5dc06f6
+		summarizeBy: none
+		sourceColumn: Source.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_заказа'
+		dataType: string
+		lineageTag: 505fc2f3-e594-4fe9-a79f-eece26fac697
+		summarizeBy: none
+		sourceColumn: Код_заказа
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Количество'
+		dataType: int64
+		formatString: 0
+		lineageTag: 809eff42-903e-42c8-ba01-0fa29b93719d
+		summarizeBy: sum
+		sourceColumn: Количество
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Статус'
+		dataType: string
+		lineageTag: fdf9d0d9-6221-46d4-bef9-79711db42b85
+		summarizeBy: none
+		sourceColumn: Статус
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Контроль_Статуса'
+		dataType: string
+		lineageTag: 5ef7377f-6a15-4623-a6f5-00e8fc466243
+		summarizeBy: none
+		sourceColumn: Контроль_Статуса
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dq_РасхожденияСтатуса' = m
+		mode: import
+		queryGroup: '03_Контроль'
+		source =
+				let
+				    Источник = Продажи,
+				    #"Строки с примененным фильтром" = Table.SelectRows(Источник, each [Контроль_Статуса] <> [Статус]),
+				    #"Другие удаленные столбцы" = Table.SelectColumns(#"Строки с примененным фильтром",{"Source.Name", "Код_заказа", "Количество", "Статус", "Контроль_Статуса"})
+				in
+				    #"Другие удаленные столбцы"
+
+	annotation PBI_ResultType = Table

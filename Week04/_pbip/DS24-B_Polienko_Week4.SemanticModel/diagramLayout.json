@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 520,
+            "y": 330
+          },
+          "nodeIndex": "FactSales",
+          "nodeLineageTag": "a72159d6-8def-4d9c-988e-5e503081d3e7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 520,
+            "y": 0
+          },
+          "nodeIndex": "DimDate",
+          "nodeLineageTag": "c27ebe94-ea9f-41b3-8c06-1c9afbb4cd87",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 900,
+            "y": 330
+          },
+          "nodeIndex": "DimProduct",
+          "nodeLineageTag": "b9b8b04b-0e95-4b13-83e1-bc37606f99c7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 140,
+            "y": 330
+          },
+          "nodeIndex": "DimCustomer",
+          "nodeLineageTag": "c2cdd8b1-a969-4730-a7f8-862f1de27372",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 330,
+            "y": 700
+          },
+          "nodeIndex": "DimStore",
+          "nodeLineageTag": "5a143323-a792-458b-bacd-aad5bea9b575",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 710,
+            "y": 700
+          },
+          "nodeIndex": "DimManager",
+          "nodeLineageTag": "25ba7a8f-1f02-4f2f-873f-54acdbe21de6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Все таблицы",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Все таблицы",
+  "defaultDiagram": "Все таблицы"
+}

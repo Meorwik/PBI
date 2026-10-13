@@ -1,0 +1,193 @@
+table 'Продажи'
+	lineageTag: 5a8aa637-3589-4d06-a398-6cef0a6bf11b
+
+	measure 'Строк' = COUNTROWS('Продажи')
+		lineageTag: 065d8c05-a807-4f35-93d9-c043132ada62
+
+	measure 'Файлов' = DISTINCTCOUNT('Продажи'[Source.Name])
+		lineageTag: edbc7157-63bf-4e27-bcc0-17f5310402d3
+
+	measure 'Выручка после скидки' = SUM('Продажи'[Сумма_после_скидки])
+		formatString: #,0
+		lineageTag: fdabfb09-0e84-4d6d-bf34-e33ae773f32a
+
+	measure 'Неизвестных товаров' = COUNTROWS('dq_НеизвестныеТовары')
+		lineageTag: 25557b1f-bb19-407f-9677-0ce8b0a2b843
+
+	measure 'Неизвестных магазинов' = COUNTROWS('dq_НеизвестныеМагазины')
+		lineageTag: 19f93f73-4ef6-4c8a-ba67-d7adf4e5fcf9
+
+	measure 'Расхождений статуса' = COUNTROWS('dq_РасхожденияСтатуса') + 0
+		lineageTag: 2814a4e9-39fd-4901-b1c6-499a4ea51423
+
+	column 'Source.Name'
+		dataType: string
+		lineageTag: a725b2b2-dea3-4ac1-8d1e-674a1f02c4e5
+		summarizeBy: none
+		sourceColumn: Source.Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_заказа'
+		dataType: string
+		lineageTag: e812f733-5a4c-4151-a99e-2877deaef691
+		summarizeBy: none
+		sourceColumn: Код_заказа
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Дата'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 97df06ad-3273-4e31-b0db-a701e31f4109
+		summarizeBy: none
+		sourceColumn: Дата
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_товара'
+		dataType: string
+		lineageTag: 66b92c1b-799a-4f6f-add2-bb9276ca0fe9
+		summarizeBy: none
+		sourceColumn: Код_товара
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Код_магазина'
+		dataType: string
+		lineageTag: ace5faef-2c1d-4e22-b5f1-d11e74bdb781
+		summarizeBy: none
+		sourceColumn: Код_магазина
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Количество'
+		dataType: int64
+		formatString: 0
+		lineageTag: 52931bcf-13d0-4370-8a6c-ef267f24c066
+		summarizeBy: sum
+		sourceColumn: Количество
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Цена'
+		dataType: double
+		lineageTag: 5a9b55fa-6cf7-4093-ad41-97c26867e20c
+		summarizeBy: sum
+		sourceColumn: Цена
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Скидка'
+		dataType: double
+		lineageTag: 6bee8fed-8245-495f-b494-dc425bc43c09
+		summarizeBy: sum
+		sourceColumn: Скидка
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Канал'
+		dataType: string
+		lineageTag: fa66cc26-85be-4dfe-b7ae-934a7bdab577
+		summarizeBy: none
+		sourceColumn: Канал
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Менеджер'
+		dataType: string
+		lineageTag: 5ef98463-87f6-47ec-9cc8-185690ce437e
+		summarizeBy: none
+		sourceColumn: Менеджер
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Статус'
+		dataType: string
+		lineageTag: 6921e221-6a41-42cf-ba6c-a8bc3d40a46f
+		summarizeBy: none
+		sourceColumn: Статус
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Сумма_после_скидки'
+		dataType: double
+		lineageTag: 8849d37c-3418-40b7-bda3-c357ad7001d2
+		summarizeBy: sum
+		sourceColumn: Сумма_после_скидки
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Контроль_Статуса'
+		dataType: string
+		lineageTag: 9296f63c-1f91-416b-8acb-d58540430532
+		summarizeBy: none
+		sourceColumn: Контроль_Статуса
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Товар'
+		dataType: string
+		lineageTag: 41bb291a-12a1-441b-963b-269230fab0f8
+		summarizeBy: none
+		sourceColumn: Товар
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Категория'
+		dataType: string
+		lineageTag: b3381028-51b8-43ac-bf7d-cf20d84874ae
+		summarizeBy: none
+		sourceColumn: Категория
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Бренд'
+		dataType: string
+		lineageTag: 9731a712-be90-48ab-95bb-eec798195dbf
+		summarizeBy: none
+		sourceColumn: Бренд
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Город'
+		dataType: string
+		lineageTag: a2167127-ade8-4177-a777-4ea17a5e86f5
+		summarizeBy: none
+		sourceColumn: Город
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Регион'
+		dataType: string
+		lineageTag: 36df4bc5-de7c-41d2-9634-9acb83925fda
+		summarizeBy: none
+		sourceColumn: Регион
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Торговая_точка'
+		dataType: string
+		lineageTag: af0c619e-d4f7-48c0-aad3-fa650f196d66
+		summarizeBy: none
+		sourceColumn: Торговая_точка
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Продажи' = m
+		mode: import
+		queryGroup: '04_Модель'
+		source =
+				let
+				    Источник = stg_ФайлыПродаж,
+				    #"Вызвана пользовательская функция" = Table.AddColumn(Источник, "Сумма_после_скидки", each fnСуммаПослеСкидки([Количество], [Цена], [Скидка])),
+				    #"Вызвана пользовательская функция1" = Table.AddColumn(#"Вызвана пользовательская функция", "Контроль_Статуса", each fnТипОперации([Количество])),
+				    #"Объединенные запросы" = Table.NestedJoin(#"Вызвана пользовательская функция1", {"Код_товара"}, dim_Товары, {"Код_товара"}, "dim_Товары", JoinKind.LeftOuter),
+				    #"Развернутый элемент dim_Товары" = Table.ExpandTableColumn(#"Объединенные запросы", "dim_Товары", {"Товар", "Категория", "Бренд"}, {"Товар", "Категория", "Бренд"}),
+				    #"Объединенные запросы1" = Table.NestedJoin(#"Развернутый элемент dim_Товары", {"Код_магазина"}, dim_Магазины, {"Код_магазина"}, "dim_Магазины", JoinKind.LeftOuter),
+				    #"Развернутый элемент dim_Магазины" = Table.ExpandTableColumn(#"Объединенные запросы1", "dim_Магазины", {"Город", "Регион", "Торговая_точка"}, {"Город", "Регион", "Торговая_точка"}),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Развернутый элемент dim_Магазины",{{"Сумма_после_скидки", type number}, {"Контроль_Статуса", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

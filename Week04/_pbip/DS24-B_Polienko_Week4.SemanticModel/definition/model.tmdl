@@ -1,0 +1,32 @@
+model Model
+	culture: ru-RU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ru-RU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup '00_STAGING'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup '10_MODEL'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup 'Параметры'
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["pSourceFile", "stg_Sales_Flat", "DimProduct", "DimCustomer", "DimStore", "DimManager", "DimDate", "FactSales"]
+
+ref table DimProduct
+ref table DimCustomer
+ref table DimStore
+ref table DimManager
+ref table DimDate
+ref table FactSales
+
+ref cultureInfo ru-RU

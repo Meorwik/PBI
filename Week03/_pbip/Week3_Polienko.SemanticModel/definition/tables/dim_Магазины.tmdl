@@ -1,0 +1,47 @@
+table 'dim_Магазины'
+	lineageTag: 429959be-1ff1-431b-b36a-5128b47794b7
+
+	column 'Код_магазина'
+		dataType: string
+		lineageTag: ec856bd0-1e66-4761-8d50-82338903e248
+		summarizeBy: none
+		sourceColumn: Код_магазина
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Город'
+		dataType: string
+		lineageTag: 0fe189ff-8543-4061-84d6-b1297e3f54f1
+		summarizeBy: none
+		sourceColumn: Город
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Регион'
+		dataType: string
+		lineageTag: 9ca6948f-8934-41f4-87b0-160079f5a741
+		summarizeBy: none
+		sourceColumn: Регион
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Торговая_точка'
+		dataType: string
+		lineageTag: fee2bab6-5dd1-493e-99ca-2aabd9059404
+		summarizeBy: none
+		sourceColumn: Торговая_точка
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_Магазины' = m
+		mode: import
+		queryGroup: '02_Staging'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pReferenceFile), null, true),
+				    Stores_Table = Источник{[Item="Stores",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(Stores_Table,{{"Код_магазина", type text}, {"Город", type text}, {"Регион", type text}, {"Торговая_точка", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table
