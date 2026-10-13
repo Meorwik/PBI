@@ -1,0 +1,95 @@
+table FactReturns
+	lineageTag: 57918567-7274-4e1d-97c6-375ee1789936
+
+	column ReturnID
+		dataType: string
+		isHidden
+		lineageTag: 374203cd-f314-42e8-851c-cdaf77db2d04
+		summarizeBy: none
+		sourceColumn: ReturnID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 71debec4-d9db-4a75-af2f-d7f822067243
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReturnDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0754e97f-81c2-40e8-8895-b3bbf5e84fe3
+		summarizeBy: none
+		sourceColumn: ReturnDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: 2bda8cf5-e72a-4297-bbf2-47d2715e51d2
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: 862f6404-05dc-4eec-8dad-f2788e8ca8eb
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: a0fccf82-a483-46cc-b4d1-7690a1df5762
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuantityReturned
+		dataType: int64
+		formatString: 0
+		lineageTag: 669b2239-65c3-4fa1-844c-455b127e1b17
+		summarizeBy: sum
+		sourceColumn: QuantityReturned
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReturnAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 59d3186c-effa-46ae-a663-eaed6344740a
+		summarizeBy: sum
+		sourceColumn: ReturnAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reason
+		dataType: string
+		lineageTag: 2c93a55a-7d5b-4166-9cd4-c2b3f5e8b75b
+		summarizeBy: none
+		sourceColumn: Reason
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactReturns = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    FactReturnsTable_Table = Источник{[Item="FactReturnsTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(FactReturnsTable_Table,{{"ReturnID", type text}, {"OrderID", Int64.Type}, {"ReturnDate", type date}, {"ProductID", type text}, {"CustomerID", type text}, {"StoreID", type text}, {"QuantityReturned", Int64.Type}, {"ReturnAmount", type number}, {"Reason", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

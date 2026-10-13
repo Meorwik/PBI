@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "DS24-B_Polienko_Week5"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fbbf697c-2943-4bed-9662-b7ae27bba88a"
+  }
+}

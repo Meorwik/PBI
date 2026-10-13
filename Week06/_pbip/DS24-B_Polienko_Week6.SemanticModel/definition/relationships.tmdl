@@ -1,0 +1,36 @@
+relationship 74c38ae5-b6c6-490e-810b-c6481e0f1a00
+	fromColumn: FactSales.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship d4833d60-5c1b-4fa6-bc0d-c65c43e2a246
+	fromColumn: FactSales.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship 36a6d925-2171-478c-b40b-216e69959a48
+	fromColumn: FactSales.StoreID
+	toColumn: DimStore.StoreID
+
+relationship 448b1935-f896-4f1e-8b50-f0ad2488d6a5
+	fromColumn: FactSales.OrderDate
+	toColumn: DimDate.Date
+
+relationship 072ed677-3772-408a-bab1-697e4de66833
+	fromColumn: FactSales.ShipDate
+	toColumn: DimDate.Date
+	isActive: false
+
+relationship a6c219e0-2aab-406e-8b54-daf76b3d0867
+	fromColumn: FactReturns.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship 96106eda-91a4-4019-a8a5-c8fbaa5b18f2
+	fromColumn: FactReturns.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship e4c3e892-2267-485e-a7c5-731b0a848105
+	fromColumn: FactReturns.StoreID
+	toColumn: DimStore.StoreID
+
+relationship bd1d20e3-5359-48c6-8659-9d373b842a6c
+	fromColumn: FactReturns.ReturnDate
+	toColumn: DimDate.Date

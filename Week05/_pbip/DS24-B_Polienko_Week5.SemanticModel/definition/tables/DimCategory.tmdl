@@ -1,0 +1,32 @@
+table DimCategory
+	lineageTag: 55f92d65-150a-43ca-b82f-f6777954167c
+
+	column CategoryID
+		dataType: string
+		isHidden
+		lineageTag: 43ca5643-c207-4bae-80af-bc564101c65d
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: aa7733ee-5acb-40b9-b28e-9f3ab715cb1d
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCategory = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimCategoryTable_Table = Источник{[Item="DimCategoryTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimCategoryTable_Table,{{"CategoryID", type text}, {"CategoryName", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,72 @@
+table DimCustomer
+	lineageTag: 1988f1cc-7826-4e02-86da-20fa3595bf24
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: ecbe9a7f-dde9-4a96-9519-1f9ab4125341
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: 61919db3-f81f-4020-a730-eeac26bbf967
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 081c14b2-a46d-4cbb-a3a2-019481526d9b
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityID
+		dataType: string
+		lineageTag: 49d3ddf2-b748-4656-ad76-a6a27be0b38e
+		summarizeBy: none
+		sourceColumn: CityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 3b03a86d-0f2d-4c23-9ba7-547fd8f6c6d1
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionID
+		dataType: string
+		lineageTag: e4249c5b-1616-4ec5-bb49-30c33bafeb07
+		summarizeBy: none
+		sourceColumn: RegionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: d65cb2cc-83bb-457b-bd26-e03d757c0b98
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCustomer = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimCustomerTable_Table = Источник{[Item="DimCustomerTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimCustomerTable_Table,{{"CustomerID", type text}, {"CustomerName", type text}, {"Segment", type text}, {"CityID", type text}, {"City", type text}, {"RegionID", type text}, {"Region", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

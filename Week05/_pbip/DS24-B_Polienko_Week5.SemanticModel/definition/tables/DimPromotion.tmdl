@@ -1,0 +1,58 @@
+table DimPromotion
+	lineageTag: ad92f745-d129-432f-8b15-b189eb4f3cad
+
+	column PromotionID
+		dataType: string
+		isHidden
+		lineageTag: d662afa2-fda3-443a-88a8-2170ad94dd1c
+		summarizeBy: none
+		sourceColumn: PromotionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionName
+		dataType: string
+		lineageTag: e27adf22-b21e-455c-bf46-e31a34d81dfd
+		summarizeBy: none
+		sourceColumn: PromotionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 2daab964-3253-436c-af88-0abfe6d8b9fd
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e20239fa-3661-4d95-ab0f-7be982a435ca
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionType
+		dataType: string
+		lineageTag: b4c6a31d-89f0-4f62-8051-01f41cd673c5
+		summarizeBy: none
+		sourceColumn: PromotionType
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimPromotion = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimPromotionTable_Table = Источник{[Item="DimPromotionTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimPromotionTable_Table,{{"PromotionID", type text}, {"PromotionName", type text}, {"StartDate", type date}, {"EndDate", type date}, {"PromotionType", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "eb6e1bbc9494486bb47b",
+  "position": {
+    "x": 1040,
+    "y": 670,
+    "z": 11000,
+    "height": 390,
+    "width": 860,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Orders Count"
+                }
+              },
+              "queryRef": "_Measures.Orders Count",
+              "nativeQueryRef": "Orders Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Sales Lines"
+                }
+              },
+              "queryRef": "_Measures.Sales Lines",
+              "nativeQueryRef": "Sales Lines"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Customers Count"
+                }
+              },
+              "queryRef": "_Measures.Customers Count",
+              "nativeQueryRef": "Customers Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Units per Order"
+                }
+              },
+              "queryRef": "_Measures.Units per Order",
+              "nativeQueryRef": "Units per Order"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Sales per Customer"
+                }
+              },
+              "queryRef": "_Measures.Sales per Customer",
+              "nativeQueryRef": "Sales per Customer"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'DISTINCTCOUNT vs COUNTROWS'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

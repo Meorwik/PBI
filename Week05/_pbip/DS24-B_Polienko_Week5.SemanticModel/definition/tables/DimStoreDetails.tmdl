@@ -1,0 +1,58 @@
+table DimStoreDetails
+	lineageTag: e38cf763-86ee-4cb6-a1e0-d313e1bb3e01
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: ad11f418-88c2-4597-bb30-de80bd56688c
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreFormat
+		dataType: string
+		lineageTag: 3fdc15f8-a7e4-4ef5-b6c7-1a5f34ddcbea
+		summarizeBy: none
+		sourceColumn: StoreFormat
+
+		annotation SummarizationSetBy = Automatic
+
+	column AreaSqM
+		dataType: int64
+		formatString: 0
+		lineageTag: c9bfb1fb-743c-45a6-9274-e4f15067e24a
+		summarizeBy: sum
+		sourceColumn: AreaSqM
+
+		annotation SummarizationSetBy = Automatic
+
+	column OpenDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 409ab70e-5d41-474a-a2e0-eb4baa8cfb41
+		summarizeBy: none
+		sourceColumn: OpenDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ownership
+		dataType: string
+		lineageTag: c148c12f-3584-4b0d-bc2b-4e1e1a9d9ba2
+		summarizeBy: none
+		sourceColumn: Ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimStoreDetails = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimStoreDetailsTable_Table = Источник{[Item="DimStoreDetailsTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimStoreDetailsTable_Table,{{"StoreID", type text}, {"StoreFormat", type text}, {"AreaSqM", Int64.Type}, {"OpenDate", type date}, {"Ownership", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

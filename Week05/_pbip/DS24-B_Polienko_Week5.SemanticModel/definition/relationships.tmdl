@@ -1,0 +1,67 @@
+relationship 0a95f14e-45aa-432e-a691-016d8052c47d
+	fromColumn: FactSales.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship dbcf0ec4-ac8e-403d-b9a1-806ca4c7d248
+	fromColumn: FactSales.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship 8f5c136e-f2ed-4ea9-a775-bd73159610a2
+	fromColumn: FactSales.StoreID
+	toColumn: DimStore.StoreID
+
+relationship 6781a50a-c31a-446b-8761-a31a9fbc6e1f
+	fromColumn: FactSales.OrderDate
+	toColumn: DimDate.Date
+
+relationship 276d4a5c-0925-4f69-931f-63c2480013e9
+	fromColumn: FactSales.ShipDate
+	toColumn: DimDate.Date
+	isActive: false
+
+relationship 66843679-6ea7-4f44-85ee-46cd21d91185
+	fromColumn: FactReturns.ProductID
+	toColumn: DimProduct.ProductID
+
+relationship 923d7343-dcf4-40d6-8288-ab5c025cb95c
+	fromColumn: FactReturns.CustomerID
+	toColumn: DimCustomer.CustomerID
+
+relationship 1b4a430a-cef0-4ab7-b3df-3faa93d5ef49
+	fromColumn: FactReturns.StoreID
+	toColumn: DimStore.StoreID
+
+relationship 56b2bcd4-793e-4484-80fc-bc3c757252aa
+	fromColumn: FactReturns.ReturnDate
+	toColumn: DimDate.Date
+
+relationship 716c6044-8205-48c0-b2cd-dd063c2538ba
+	fromColumn: DimStoreDetails.StoreID
+	toColumn: DimStore.StoreID
+	fromCardinality: one
+	crossFilteringBehavior: bothDirections
+
+relationship dbdd52cf-40ef-4c7c-85d3-d7e0ae1a5329
+	fromColumn: BridgeProductPromotion.ProductID
+	toColumn: DimProduct.ProductID
+	crossFilteringBehavior: bothDirections
+
+relationship 7dccf3c3-cd79-451c-9d48-04d1ff295ca4
+	fromColumn: BridgeProductPromotion.PromotionID
+	toColumn: DimPromotion.PromotionID
+
+relationship 5301078d-448b-484d-b73a-d7a9ee32962a
+	fromColumn: FactBudget.StoreID
+	toColumn: DimStore.StoreID
+
+relationship fc6fcd07-4c17-453c-8a0e-1868de031188
+	fromColumn: FactBudget.CategoryID
+	toColumn: DimCategory.CategoryID
+
+relationship 74cc5a00-2aa5-44a6-ba40-e07bce11d8ae
+	fromColumn: FactBudget.MonthStart
+	toColumn: DimDate.Date
+
+relationship fef73027-930f-441c-b75f-4c55d06bfd27
+	fromColumn: DimProduct.CategoryID
+	toColumn: DimCategory.CategoryID

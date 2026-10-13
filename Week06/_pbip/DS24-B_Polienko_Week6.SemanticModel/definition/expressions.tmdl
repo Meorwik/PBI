@@ -1,0 +1,5 @@
+expression pSourceFile = "Z:\Week06\PowerBI_Week6_DAX_Dataset.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 23473bf9-23ab-4f17-83c0-a8e222df8ea2
+	queryGroup: 'Параметры'
+
+	annotation PBI_ResultType = Text

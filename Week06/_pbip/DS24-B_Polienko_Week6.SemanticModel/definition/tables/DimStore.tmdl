@@ -1,0 +1,64 @@
+table DimStore
+	lineageTag: 68cc1cdc-d9c4-4c6a-9fd4-ec6b8ae58ac2
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: 15cff6cf-a80b-4c0c-9906-ca5548e63f93
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreName
+		dataType: string
+		lineageTag: d8436821-2e1c-4553-9a36-0c652e1d05a2
+		summarizeBy: none
+		sourceColumn: StoreName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CityID
+		dataType: string
+		lineageTag: bbf1f755-aa65-44b7-a9ea-6a665201850a
+		summarizeBy: none
+		sourceColumn: CityID
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: e5a3d5a3-4bdb-4012-a345-a678184e8798
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionID
+		dataType: string
+		lineageTag: bf253709-b7e7-40e0-9f7f-3bac57f432dd
+		summarizeBy: none
+		sourceColumn: RegionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 91741554-fbbd-455e-974c-1a3867778fd5
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimStore = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimStoreTable_Table = Источник{[Item="DimStoreTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimStoreTable_Table,{{"StoreID", type text}, {"StoreName", type text}, {"CityID", type text}, {"City", type text}, {"RegionID", type text}, {"Region", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

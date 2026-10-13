@@ -1,0 +1,105 @@
+table DimDate
+	lineageTag: 860ab94b-4cf6-45e3-ad51-b677723870bf
+
+	column DateKey
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 47808e2e-45c2-45c5-9b20-9e7e7785db8b
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: efe667c4-9332-4516-a786-a7c5527af743
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: f4c08edd-ebae-4cf0-bcdb-28338acb3ba6
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 938cb1ba-b746-4d01-9c7c-3186d94cb3d2
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 933f7d4b-0cc3-4a05-80a7-f3370148bf5f
+		summarizeBy: sum
+		sourceColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: e9fb4ad4-c5cd-47c7-8cad-186e3bdd1019
+		summarizeBy: none
+		sourceColumn: MonthName
+		sortByColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ISOWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: c966ecfc-3e03-4075-b17c-06b4c874de0a
+		summarizeBy: sum
+		sourceColumn: ISOWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: 66e48126-df16-47fe-8f0d-9ee77fe1ef2a
+		summarizeBy: sum
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkday
+		dataType: int64
+		formatString: 0
+		lineageTag: 19b7c2d1-5115-4a98-ae39-4478610ca852
+		summarizeBy: sum
+		sourceColumn: IsWorkday
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthStart
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 89729d8e-d65e-40f1-96f0-156484922f33
+		summarizeBy: none
+		sourceColumn: MonthStart
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimDateTable_Table = Источник{[Item="DimDateTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimDateTable_Table,{{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"MonthNo", Int64.Type}, {"MonthName", type text}, {"ISOWeek", Int64.Type}, {"Day", Int64.Type}, {"IsWorkday", Int64.Type}, {"MonthStart", type date}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

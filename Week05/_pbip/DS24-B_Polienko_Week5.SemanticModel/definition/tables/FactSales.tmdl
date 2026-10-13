@@ -1,0 +1,169 @@
+table FactSales
+	lineageTag: 33cb6d66-09b9-495d-8ca5-ec87e1422b73
+
+	measure 'Total Sales' = SUM(FactSales[SalesAmount])
+		formatString: #,0
+		lineageTag: fb9e702e-513f-4537-a7f9-298963e3f09d
+
+	measure 'Sales by Ship Date' = CALCULATE([Total Sales], USERELATIONSHIP(DimDate[Date], FactSales[ShipDate]))
+		formatString: #,0
+		lineageTag: cd0d8014-51cd-4b2e-a714-e694698cdaa4
+
+	measure 'Ship - Order diff' = [Sales by Ship Date] - [Total Sales]
+		formatString: #,0
+		lineageTag: a4fda750-5fa0-49e8-893f-90cc77319143
+
+	measure 'Total Returns' = SUM(FactReturns[ReturnAmount])
+		formatString: #,0
+		lineageTag: a1362c0d-2f1a-45b3-a317-f8e197a040d7
+
+	measure 'Return Rate %' = DIVIDE([Total Returns], [Total Sales])
+		formatString: 0.0%
+		lineageTag: 36eeb9ac-ddf0-4970-b218-99e35b8c94ed
+
+	measure 'Total Budget' = SUM(FactBudget[BudgetAmount])
+		formatString: #,0
+		lineageTag: 931b2342-7e7d-47b2-9c86-ba675163a5a7
+
+	measure 'Sales vs Budget %' = DIVIDE([Total Sales], [Total Budget])
+		formatString: 0.0%
+		lineageTag: 54c67c57-ade7-41f7-8a36-cf365c500c9b
+
+	measure 'Promo Links' = COUNTROWS(BridgeProductPromotion)
+		lineageTag: 3bbc079e-9070-4735-9e6c-fa83b0f5bb5c
+
+	measure 'Customers (Single)' = COUNTROWS(DimCustomer)
+		lineageTag: c4b3065f-4d36-4e9a-9360-8ce45ada1d95
+
+	measure 'Customers (Both via CROSSFILTER)' = CALCULATE(COUNTROWS(DimCustomer), CROSSFILTER(FactSales[CustomerID], DimCustomer[CustomerID], Both))
+		lineageTag: ffc7f6e1-c0ff-4945-b117-92c792f0449b
+
+	column SalesLineID
+		dataType: string
+		isHidden
+		lineageTag: bf14507e-6ec1-4cbe-b906-09e2d59f3426
+		summarizeBy: none
+		sourceColumn: SalesLineID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c4390b7-9712-4b23-93e8-ce031f5e93af
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f7d5025c-9ab6-45b0-91c5-44bdb51de81d
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0088c5c9-c5f6-4a02-b543-a526a0807484
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: cde7aa36-d6c5-4b28-8b6c-3a686035cb29
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: 929afa1a-dded-4b94-8a6d-92d9da6bb871
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: cf58ee18-26fc-4484-a8f1-234187078d79
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: dec0707b-2924-4523-905c-9bbe0279a281
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		formatString: #,0
+		lineageTag: 0d22c8fe-45ea-4581-9d01-2affa01d71b8
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: double
+		formatString: 0%
+		lineageTag: 36c730ed-f012-4629-9b9f-870dd36b0f28
+		summarizeBy: sum
+		sourceColumn: DiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 5ece4e3a-24c7-4993-b550-5a9d599ece67
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 293d6b41-4501-4674-8ad7-41288c2268b0
+		summarizeBy: sum
+		sourceColumn: CostAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProfitAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: e5de125a-b326-47b1-9c9c-73be34069627
+		summarizeBy: sum
+		sourceColumn: ProfitAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    FactSalesTable_Table = Источник{[Item="FactSalesTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(FactSalesTable_Table,{{"SalesLineID", type text}, {"OrderID", Int64.Type}, {"OrderDate", type date}, {"ShipDate", type date}, {"ProductID", type text}, {"CustomerID", type text}, {"StoreID", type text}, {"Quantity", Int64.Type}, {"UnitPrice", type number}, {"DiscountPct", Percentage.Type}, {"SalesAmount", type number}, {"CostAmount", type number}, {"ProfitAmount", type number}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

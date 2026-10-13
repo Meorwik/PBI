@@ -1,0 +1,33 @@
+table BridgeProductPromotion
+	lineageTag: ecb7b025-83a6-4e4f-900e-ea121752bd42
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: 34822c75-1775-4bab-b09f-ed6aec726371
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionID
+		dataType: string
+		isHidden
+		lineageTag: a065f7db-d163-4719-9759-d23248486c8f
+		summarizeBy: none
+		sourceColumn: PromotionID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition BridgeProductPromotion = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    BridgeProductPromotionTable_Table = Источник{[Item="BridgeProductPromotionTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(BridgeProductPromotionTable_Table,{{"ProductID", type text}, {"PromotionID", type text}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

@@ -12,10 +12,11 @@ TYPES = {"text": "string", "int": "int64", "num": "double", "date": "dateTime", 
 class Query:
     """M-запрос. cols = [(имя, тип)] только для загружаемых в модель (load=True)."""
 
-    def __init__(self, name, m, group=None, cols=None, load=True, measures=None, hidden=(), result="Table", attrs=None, fmt=None):
+    def __init__(self, name, m, group=None, cols=None, load=True, measures=None, hidden=(), result="Table", attrs=None, fmt=None, calc=None):
         self.name, self.m, self.group, self.cols = name, textwrap.dedent(m).strip(), group, cols or []
         self.load, self.measures, self.hidden = load, measures or {}, set(hidden)
-        self.result, self.attrs, self.fmt = result, attrs, fmt or {}  # result: Table/Function/Binary; attrs — mAttributes (Combine Files)
+        self.result, self.attrs, self.fmt = result, attrs, fmt or {}
+        self.calc = calc or {}  # вычисляемые столбцы: {имя: (DAX, тип, формат)}  # result: Table/Function/Binary; attrs — mAttributes (Combine Files)
 
 
 def q(name):
@@ -73,13 +74,25 @@ def build(base, queries, relationships=(), params=None, sort_by=None, param_grou
         tags[x.name] = str(uuid.uuid4())
         t = [f"table {q(x.name)}", f"\tlineageTag: {tags[x.name]}", ""]
         for mname, dax in x.measures.items():
-            fmt = None
+            fmt = folder = None
             if isinstance(dax, tuple):
-                dax, fmt = dax
-            t += [f"\tmeasure {q(mname)} = {dax}"]
+                dax, fmt, folder = (*dax, None)[:3]
+            if "\n" in dax:  # многострочная формула: тело с отступом, как сохраняет сам Power BI
+                t += [f"\tmeasure {q(mname)} =", _indent(textwrap.dedent(dax).strip(), 3)]
+            else:
+                t += [f"\tmeasure {q(mname)} = {dax}"]
             if fmt:
                 t.append(f"\t\tformatString: {fmt}")
+            if folder:
+                t.append(f"\t\tdisplayFolder: {folder}")
             t += [f"\t\tlineageTag: {uuid.uuid4()}", ""]
+        for cname, (dax, typ, fmt) in x.calc.items():
+            t += [f"\tcolumn {q(cname)} = {dax}", f"\t\tdataType: {TYPES[typ]}"]
+            if fmt:
+                t.append(f"\t\tformatString: {fmt}")
+            if cname in x.hidden:
+                t.append("\t\tisHidden")
+            t += [f"\t\tlineageTag: {uuid.uuid4()}", "\t\tsummarizeBy: sum", "", "\t\tannotation SummarizationSetBy = Automatic", ""]
         for c, typ in x.cols:
             t += [f"\tcolumn {q(c)}", f"\t\tdataType: {TYPES[typ]}"]
             if c in x.fmt:

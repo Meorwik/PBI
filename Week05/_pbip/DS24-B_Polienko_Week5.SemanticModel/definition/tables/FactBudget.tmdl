@@ -1,0 +1,60 @@
+table FactBudget
+	lineageTag: 165c7be4-9280-4e64-b1c1-398fb7e83cb3
+
+	column BudgetID
+		dataType: string
+		isHidden
+		lineageTag: cfdab943-c20c-4c81-b862-5d1f1bf130c7
+		summarizeBy: none
+		sourceColumn: BudgetID
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthStart
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 5e382e2a-45c2-45cb-9ccc-829b067bd708
+		summarizeBy: none
+		sourceColumn: MonthStart
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: 5017f8de-aa33-4061-9408-2f3c4d38923c
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		isHidden
+		lineageTag: 4f5219c5-3416-4cb4-94ad-8b59e2ed7b91
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BudgetAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 67cebc9f-d578-4458-b31c-3357f4114190
+		summarizeBy: sum
+		sourceColumn: BudgetAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactBudget = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    FactBudgetTable_Table = Источник{[Item="FactBudgetTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(FactBudgetTable_Table,{{"BudgetID", type text}, {"MonthStart", type date}, {"StoreID", type text}, {"CategoryID", type text}, {"BudgetAmount", type number}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

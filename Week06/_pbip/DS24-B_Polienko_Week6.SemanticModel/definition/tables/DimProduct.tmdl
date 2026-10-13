@@ -1,0 +1,75 @@
+table DimProduct
+	lineageTag: 99068b52-8673-48c2-b72a-689faeff30be
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: 86b0bc21-a1d7-4cd3-99e4-9a246c634eed
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 496d7219-a5ff-40cc-9d51-7ac80b94bb6b
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		isHidden
+		lineageTag: 306646ad-cdde-454e-abec-10123d5922a8
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: 64803ac9-6897-4921-8b4c-90489c82608b
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: 441713bc-1641-4f25-9aa5-58d5323986b8
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column ListPrice
+		dataType: double
+		formatString: #,0
+		lineageTag: 88093144-11a2-4940-a0b9-d67863f05a5a
+		summarizeBy: sum
+		sourceColumn: ListPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column StandardCost
+		dataType: double
+		formatString: #,0
+		lineageTag: 6b59cb59-1cca-427d-ab05-663c58aa6b12
+		summarizeBy: sum
+		sourceColumn: StandardCost
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    DimProductTable_Table = Источник{[Item="DimProductTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(DimProductTable_Table,{{"ProductID", type text}, {"ProductName", type text}, {"CategoryID", type text}, {"CategoryName", type text}, {"Brand", type text}, {"ListPrice", type number}, {"StandardCost", type number}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table

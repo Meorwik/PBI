@@ -1,0 +1,141 @@
+table FactSales
+	lineageTag: 55bc4324-b42b-4416-8c4c-aee6b3c73448
+
+	column 'Profit Row Calc' = FactSales[SalesAmount] - FactSales[CostAmount]
+		dataType: double
+		formatString: #,0
+		isHidden
+		lineageTag: 12a17158-9872-4869-a230-d38fbcbf0f03
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesLineID
+		dataType: string
+		isHidden
+		lineageTag: 15d36c48-d2e5-4b83-9c78-ea6dc613b32c
+		summarizeBy: none
+		sourceColumn: SalesLineID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: b824dd92-6119-43dc-bf4d-51e305c7bf2d
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 2e910930-d1e5-4a0f-8179-1c3e46eac15c
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 183b1ec4-39c0-481f-b333-a1f08a555199
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		isHidden
+		lineageTag: 303e9018-b029-4c00-b8c8-2d89958e229d
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		isHidden
+		lineageTag: b7877308-587a-46c5-8c7a-8e2aed3ca8f4
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		isHidden
+		lineageTag: f09f4794-f842-4441-bac2-1f81f3ab3a3c
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 23c221fb-d250-417c-b0fe-ee123be81e20
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		formatString: #,0
+		lineageTag: 0de26515-f9d4-4de5-b873-7f183f910cb2
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: double
+		formatString: 0%
+		lineageTag: 12d81359-2f18-497b-b383-4d474c063ff6
+		summarizeBy: sum
+		sourceColumn: DiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 3dcb088f-b308-46cc-8a74-e7d570c3440b
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: 2f209f64-c76b-4353-a1d2-6a3bd361086d
+		summarizeBy: sum
+		sourceColumn: CostAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProfitAmount
+		dataType: double
+		formatString: #,0
+		lineageTag: ca6a78b0-8ba6-42bc-8637-25ddf12d48f6
+		summarizeBy: sum
+		sourceColumn: ProfitAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		queryGroup: 'Модель'
+		source =
+				let
+				    Источник = Excel.Workbook(File.Contents(pSourceFile), null, true),
+				    FactSalesTable_Table = Источник{[Item="FactSalesTable",Kind="Table"]}[Data],
+				    #"Измененный тип" = Table.TransformColumnTypes(FactSalesTable_Table,{{"SalesLineID", type text}, {"OrderID", Int64.Type}, {"OrderDate", type date}, {"ShipDate", type date}, {"ProductID", type text}, {"CustomerID", type text}, {"StoreID", type text}, {"Quantity", Int64.Type}, {"UnitPrice", type number}, {"DiscountPct", Percentage.Type}, {"SalesAmount", type number}, {"CostAmount", type number}, {"ProfitAmount", type number}})
+				in
+				    #"Измененный тип"
+
+	annotation PBI_ResultType = Table
